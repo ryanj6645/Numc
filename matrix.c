@@ -212,7 +212,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         int temp = 0;
         for(int c = 0; c < mat1->cols; c++){
             temp = mat1->data[r][c] * mat2->data[r][c] + temp;
-            printf("%d", temp);
+            printf("%d\n", temp);
             result->data[r][c] = temp;
         }
 

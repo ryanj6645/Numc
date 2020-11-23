@@ -76,7 +76,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     if (!*mat) {
         return -1;
     }
-    *mat->rows = rows;
+    (*mat)->rows = rows;
     *mat->cols = cols;
     *mat->ref_cnt = 1;
     *mat->parent = NULL;

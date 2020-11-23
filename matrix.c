@@ -131,13 +131,17 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
  * See the spec for more information.
  */
 void deallocate_matrix(matrix *mat) {
-  if(mat->ref_cnt == 1){
-    for (int r = 0; r < mat->rows; r++) {
-        free(mat->data[r]);
+    if (!mat) {
+        return -1;
     }
-    free(mat->data);
-  }
-  free(mat);
+    if(mat->ref_cnt == 1){
+        for (int r = 0; r < mat->rows; r++) {
+            free(mat->data[r]);
+        }
+        free(mat->data);
+    }
+    free(mat);
+    return 0;
 }
 
 /*
@@ -228,33 +232,32 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
-    /* TODO: YOUR CODE HERE */
-    // if (mat->rows != mat->cols || pow < 0) {
-    //     return -1;
-    // }
-    // if (pow == 0) {
-    //     for (int r = 0; r < mat->rows; r++) {
-    //         for (int c = 0; c < mat->cols; c++) {
-    //             if(c == r){
-    //                 result->data[r][c] = 1;
-    //             }else{
-    //                 result->data[r][c] = 0;
-    //             }
-    //         }
-    //     }
-    //     return 0;
-    // } else if(pow == 1) {
-    //     for (int r = 0; r < mat->rows; r++) {
-    //         for (int c = 0; c < mat->cols; c++) {
-    //             result->data[r][c] = mat->data[r][c];
-    //         }
-    //     }
-    // } else {
-    //     mul_matrix(result, mat, mat);
-    //     for (int i = 2; i < pow; i++) {
-    //         mul_matrix(result, result, mat);
-    //     }
-    // }
+    if (mat->rows != mat->cols || pow < 0) {
+        return -1;
+    }
+    if (pow == 0) {
+        for (int r = 0; r < mat->rows; r++) {
+            for (int c = 0; c < mat->cols; c++) {
+                if(c == r){
+                    result->data[r][c] = 1;
+                }else{
+                    result->data[r][c] = 0;
+                }
+            }
+        }
+        return 0;
+    } else if(pow == 1) {
+        for (int r = 0; r < mat->rows; r++) {
+            for (int c = 0; c < mat->cols; c++) {
+                result->data[r][c] = mat->data[r][c];
+            }
+        }
+    } else {
+        mul_matrix(result, mat, mat);
+        for (int i = 2; i < pow; i++) {
+            mul_matrix(result, result, mat);
+        }
+    }
     return 0;
 }
 

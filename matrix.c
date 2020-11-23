@@ -87,7 +87,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -1;
     }
     for (int i = 0; i < (*mat)->rows; i++) {
-        double *curr_row = (*mat)->data[i] = calloc(read_in->cols * sizeof(double));
+        double *curr_row = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
         if (!curr_row) {
             for (int x = 0; x < i; x++){
                 free((*mat)->data[x]);
@@ -175,8 +175,8 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
         return -1;
     }
-    for (int r = 0; r < mat->rows; r++) {
-        for(int c = 0; c < mat->cols; c++){
+    for (int r = 0; r < mat1->rows; r++) {
+        for(int c = 0; c < mat1->cols; c++){
             result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
         }
     }
@@ -191,8 +191,8 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
         return -1;
     }
-    for (int r = 0; r < mat->rows; r++) {
-        for(int c = 0; c < mat->cols; c++){
+    for (int r = 0; r < mat1->rows; r++) {
+        for(int c = 0; c < mat1->cols; c++){
             result->data[r][c] = mat1->data[r][c] - mat2->data[r][c];
         }
     }
@@ -205,7 +205,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that matrix multiplication is not the same as multiplying individual elements.
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    if (mat1->col != mat2->row) {
+    if (mat1->cols != mat2->rows) {
         return -1;
     }
     for (int r = 0; r < mat2->rows; r++) {
@@ -244,7 +244,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             }
         }
     } else {
-        mul_matrix(result, mat, mat)
+        mul_matrix(result, mat, mat);
         for (int i = 2; i < pow; i++) {
             mul_matrix(result, result, mat);
         }

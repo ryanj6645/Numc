@@ -210,22 +210,17 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
     for (int r = 0; r < mat1->rows; r++) {
-        int temp = 0;
         for(int c = 0; c < mat2->cols; c++){
-            temp = mat1->data[r][c] * mat2->data[c][r] + temp;
-            result->data[r][c] = temp;
+            int temp = 0;
+            for(int i = 0; i < mat1->cols; i++) {
+                temp = mat1->data[r][i] * mat2->data[i][c] + temp;
+                result[r][c] = temp;
+            }
         }
 
     }
     return 0;
 }
-
-
-
-
-
-
-
 
 /*
  * Store the result of raising mat to the (pow)th power to `result`.

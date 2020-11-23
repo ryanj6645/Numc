@@ -259,6 +259,10 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         for (int i = 2; i < pow; i++) {
             mul_matrix(result, result, mat);
         }
+        printf("%d\n", get(result, 0, 0));
+        printf("%d\n", get(result, 0, 1));
+        printf("%d\n", get(result, 1, 0));
+        printf("%d\n", get(result, 1, 1));
     }
     return 0;
 }

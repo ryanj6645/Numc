@@ -214,7 +214,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             int temp = 0;
             for(int i = 0; i < mat1->cols; i++) {
                 temp = mat1->data[r][i] * mat2->data[i][c] + temp;
-                result[r][c] = temp;
+                result->data[r][c] = temp;
             }
         }
 

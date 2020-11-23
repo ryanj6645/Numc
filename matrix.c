@@ -160,8 +160,8 @@ void set(matrix *mat, int row, int col, double val) {
  * Set all entries in mat to val
  */
 void fill_matrix(matrix *mat, double val) {
-    for (r = 0; r < mat->rows; r++) {
-        for(c = 0; c < mat->cols; c++){
+    for (int r = 0; r < mat->rows; r++) {
+        for(int c = 0; c < mat->cols; c++){
           mat->data[r][c] = val;
         }
     }
@@ -175,8 +175,8 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
         return -1;
     }
-    for (r = 0; r < mat->rows; r++) {
-        for(c = 0; c < mat->cols; c++){
+    for (int r = 0; r < mat->rows; r++) {
+        for(int c = 0; c < mat->cols; c++){
             result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
         }
     }
@@ -191,8 +191,8 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
         return -1;
     }
-    for (r = 0; r < mat->rows; r++) {
-        for(c = 0; c < mat->cols; c++){
+    for (int r = 0; r < mat->rows; r++) {
+        for(int c = 0; c < mat->cols; c++){
             result->data[r][c] = mat1->data[r][c] - mat2->data[r][c];
         }
     }
@@ -208,8 +208,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->col != mat2->row) {
         return -1;
     }
-    for (r = 0; r < mat2->rows; r++) {
-        for(c = 0; c < mat1->cols; c++){
+    for (int r = 0; r < mat2->rows; r++) {
+        for(int c = 0; c < mat1->cols; c++){
             result->data[r][c] = mat1->data[r][c] * mat2->data[r][c] + result->data[r][c];
         }
     }
@@ -227,8 +227,8 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         return -1;
     }
     if (pow == 0) {
-        for (r = 0; r < mat->rows; r++) {
-            for (c = 0; c < mat->cols; c++) {
+        for (int r = 0; r < mat->rows; r++) {
+            for (int c = 0; c < mat->cols; c++) {
                 if(c == r){
                     result->data[r][c] = 1;
                 }else{
@@ -238,8 +238,8 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         }
         return 0;
     } else if(pow == 1) {
-        for (r = 0; r < mat->rows; r++) {
-            for (c = 0; c < mat->cols; c++) {
+        for (int r = 0; r < mat->rows; r++) {
+            for (int c = 0; c < mat->cols; c++) {
                 result->data[r][c] = mat->data[r][c];
             }
         }
@@ -258,8 +258,8 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
  */
 int neg_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
-    for (r = 0; r < mat->rows; r++) {
-        for (c = 0; c < mat->cols; c++) {
+    for (int r = 0; r < mat->rows; r++) {
+        for (int c = 0; c < mat->cols; c++) {
           result->data[r][c] = -1 * mat->data[r][c];
         }
     }
@@ -272,8 +272,8 @@ int neg_matrix(matrix *result, matrix *mat) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
-    for (r = 0; r < mat->rows; r++) {
-        for (c = 0; c < mat->cols; c++) {
+    for (int r = 0; r < mat->rows; r++) {
+        for (int c = 0; c < mat->cols; c++) {
           if(mat->data[r][c] < 0){
             result->data[r][c] = -1 * mat->data[r][c];
           }else{

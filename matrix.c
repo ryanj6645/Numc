@@ -209,9 +209,12 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
     for (int r = 0; r < mat2->rows; r++) {
+        int temp = 0;
         for(int c = 0; c < mat1->cols; c++){
-            result->data[r][c] = mat1->data[r][c] * mat2->data[r][c] + result->data[r][c];
+            temp = mat1->data[r][c] * mat2->data[r][c] + temp;
+            result->data[r][c] = temp;
         }
+        
     }
     return 0;
 }

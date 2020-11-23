@@ -232,24 +232,24 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->cols != mat2->rows) {
         return -1;
     }
-    matrix **temp_m = NULL;
-    allocate_matrix(temp_m, result->rows, result->cols);
+    matrix *temp_m = NULL;
+    allocate_matrix(&temp_m, result->rows, result->cols);
     for (int r = 0; r < mat1->rows; r++) {
         for (int c = 0; c < mat1->cols; c++) {
-            (*temp_m)->data[r][c] = mat1->data[r][c];
+            temp_m->data[r][c] = mat1->data[r][c];
         }
     }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
-    for (int r = 0; r < (*temp_m)->rows; r++) {
+    for (int r = 0; r < temp_m->rows; r++) {
         for(int c = 0; c < mat2->cols; c++){
             int temp = 0;
-            for(int i = 0; i < (*temp_m)->cols; i++) {
-                temp = (*temp_m)->data[r][i] * mat2->data[i][c] + temp;
+            for(int i = 0; i < temp_m->cols; i++) {
+                temp = temp_m->data[r][i] * mat2->data[i][c] + temp;
                 result->data[r][c] = temp;
             }
         }
     }
-    deallocate_matrix(*temp_m);
+    deallocate_matrix(temp_m);
     return 0;
 }
 

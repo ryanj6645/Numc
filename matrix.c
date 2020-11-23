@@ -209,9 +209,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
-    for (int r = 0; r < mat2->rows; r++) {
+    for (int r = 0; r < mat1->rows; r++) {
         int temp = 0;
-        for(int c = 0; c < mat1->cols; c++){
+        for(int c = 0; c < mat2->cols; c++){
             temp = mat1->data[r][c] * mat2->data[c][r] + temp;
             result->data[r][c] = temp;
         }

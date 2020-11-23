@@ -57,8 +57,47 @@ void rand_matrix(matrix *result, unsigned int seed, double low, double high) {
  * failure, then remember to set it in numc.c.
  * Return 0 upon success and non-zero upon failure.
  */
+ /*
+ typedef struct matrix {
+  int rows;       // number of rows
+  int cols;       // number of columns
+  double **data;  // each element is a pointer to a row of data
+  int is_1d;      // Whether this matrix is a 1d matrix
+                  // For 1D matrix, shape is (rows * cols)
+  int ref_cnt;
+  struct matrix *parent;
+} matrix;
+ */
 int allocate_matrix(matrix **mat, int rows, int cols) {
-    /* TODO: YOUR CODE HERE */
+    if (rows < 1 || cols < 1) {
+        return -1;
+    }
+    *mat = (matrix **) malloc(sizeof(matrix));
+    if (!*mat) {
+        return -1;
+    }
+    mat->rows = rows;
+    mat->cols = cols;
+    mat->ref_cnt = 1;
+    mat->parent = NULL;
+    mat->is_1d = rows * cols;
+    mat->data = (double **) malloc(rows * sizeof(double *));
+    if (!mat->data) {
+        free(mat);
+        return -1;
+    }
+    for (int i = 0; i < mat->rows; i++) {
+        double *curr_row = mat->data[i] = calloc(read_in->cols * sizeof(double));
+        if (!curr_row) {
+            for (int x = 0; x < i; x++){
+                free(mat->data[x]);
+            }
+            free(mat->data);
+            free(mat);
+            return -1;
+        }
+    }
+    return 0;
 }
 
 /*
@@ -71,6 +110,17 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
 int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offset,
                         int rows, int cols) {
     /* TODO: YOUR CODE HERE */
+    if (row_offset >= rows || col_offset >= cols) {
+        return -1;;
+    }
+    allocate_matrix(mat, rows, cols);
+    mat->ref_cnt = from->ref_cnt + 1;
+    for (int r = row_offset; r < mat->rows; r++) {
+        for (int c = col_offset; c < mat->cols; c++) {
+            (*mat)->data[r - row_offset][c - col_offset] = from->data[r][c];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -81,7 +131,13 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
  * See the spec for more information.
  */
 void deallocate_matrix(matrix *mat) {
-    /* TODO: YOUR CODE HERE */
+  if(mat->ref_cnt == 1){
+    for (int r = 0; r < mat->rows; r++) {
+        free(mat->data[r]);
+    }
+    free(mat->data);
+  }
+  free(mat);
 }
 
 /*
@@ -89,7 +145,7 @@ void deallocate_matrix(matrix *mat) {
  * You may assume `row` and `col` are valid.
  */
 double get(matrix *mat, int row, int col) {
-    /* TODO: YOUR CODE HERE */
+    return mat->data[row][col];
 }
 
 /*
@@ -97,14 +153,18 @@ double get(matrix *mat, int row, int col) {
  * `col` are valid
  */
 void set(matrix *mat, int row, int col, double val) {
-    /* TODO: YOUR CODE HERE */
+    mat->data[row][col] = val;
 }
 
 /*
  * Set all entries in mat to val
  */
 void fill_matrix(matrix *mat, double val) {
-    /* TODO: YOUR CODE HERE */
+    for (r = 0; r < mat->rows; r++) {
+        for(c = 0; c < mat->cols; c++){
+          mat->data[r][c] = val;
+        }
+    }
 }
 
 /*
@@ -112,7 +172,15 @@ void fill_matrix(matrix *mat, double val) {
  * Return 0 upon success and a nonzero value upon failure.
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    /* TODO: YOUR CODE HERE */
+    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
+        return -1;
+    }
+    for (r = 0; r < mat->rows; r++) {
+        for(c = 0; c < mat->cols; c++){
+            result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -120,7 +188,15 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  */
 int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    /* TODO: YOUR CODE HERE */
+    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
+        return -1;
+    }
+    for (r = 0; r < mat->rows; r++) {
+        for(c = 0; c < mat->cols; c++){
+            result->data[r][c] = mat1->data[r][c] - mat2->data[r][c];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -129,7 +205,15 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that matrix multiplication is not the same as multiplying individual elements.
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    /* TODO: YOUR CODE HERE */
+    if (mat1->col != mat2->row) {
+        return -1;
+    }
+    for (r = 0; r < mat2->rows; r++) {
+        for(c = 0; c < mat1->cols; c++){
+            result->data[r][c] = mat1->data[r][c] * mat2->data[r][c] + result->data[r][c];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -139,6 +223,33 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     /* TODO: YOUR CODE HERE */
+    if (mat->rows != mat->cols || pow < 0) {
+        return -1;
+    }
+    if (pow == 0) {
+        for (r = 0; r < mat->rows; r++) {
+            for (c = 0; c < mat->cols; c++) {
+                if(c == r){
+                    result->data[r][c] = 1;
+                }else{
+                    result->data[r][c] = 0;
+                }
+            }
+        }
+        return 0;
+    } else if(pow == 1) {
+        for (r = 0; r < mat->rows; r++) {
+            for (c = 0; c < mat->cols; c++) {
+                result->data[r][c] = mat->data[r][c];
+            }
+        }
+    } else {
+        mul_matrix(result, mat, mat)
+        for (int i = 2, i < pow; i++) {
+            mul_matrix(result, result, mat);
+        }
+    }
+    return 0;
 }
 
 /*
@@ -147,6 +258,12 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
  */
 int neg_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
+    for (r = 0; r < mat->rows; r++) {
+        for (c = 0; c < mat->cols; c++) {
+          result->data[r][c] = -1 * mat->data[r][c];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -155,5 +272,14 @@ int neg_matrix(matrix *result, matrix *mat) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
+    for (r = 0; r < mat->rows; r++) {
+        for (c = 0; c < mat->cols; c++) {
+          if(mat->data[r][c] < 0){
+            result->data[r][c] = -1 * mat->data[r][c];
+          }else{
+            result->data[r][c] = mat->data[r][c];
+          }
+        }
+    }
+    return 0;
 }
-

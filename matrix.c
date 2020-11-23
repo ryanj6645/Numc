@@ -232,8 +232,8 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->cols != mat2->rows) {
         return -1;
     }
-    matrix **temp_m;
-    allocate_matrix(temp_m, result->rows, result->cols);
+    matrix **temp_m = NULL;
+    allocate_matrix(&temp_m, result->rows, result->cols);
     for (int r = 0; r < mat1->rows; r++) {
         for (int c = 0; c < mat1->cols; c++) {
             (*temp_m)->data[r][c] = mat1->data[r][c];

@@ -253,7 +253,7 @@ void pow_test2(void) {
   CU_ASSERT_EQUAL(get(result, 0, 1), 0);
   CU_ASSERT_EQUAL(get(result, 1, 0), 0);
   CU_ASSERT_EQUAL(get(result, 1, 1), 1);
-  int x = pow_matrix(result, mat, 0);
+  int x = pow_matrix(result, mat, -1);
   CU_ASSERT_EQUAL(x, -1);
   deallocate_matrix(result);
   deallocate_matrix(mat);
@@ -382,7 +382,7 @@ int main(void) {
             (CU_add_test(pSuite, "neg_test", neg_test) == NULL) ||
             (CU_add_test(pSuite, "abs_test", abs_test) == NULL) ||
             (CU_add_test(pSuite, "pow_test", pow_test) == NULL) ||
-            (CU_add_test(pSuite, "pow_test", pow_test2) == NULL) ||
+            (CU_add_test(pSuite, "pow_test2", pow_test2) == NULL) ||
             (CU_add_test(pSuite, "alloc_fail_test", alloc_fail_test) == NULL) ||
             (CU_add_test(pSuite, "alloc_success_test", alloc_success_test) == NULL) ||
             (CU_add_test(pSuite, "alloc_ref_test", alloc_ref_test) == NULL) ||

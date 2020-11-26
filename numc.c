@@ -421,7 +421,7 @@ PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
     }
     int rowsA = self->mat->rows;
     int colsA = self->mat->cols;
-    if(rowsA != colsA || (int) pow < 0){
+    if(rowsA != colsA || (long) pow < 0){
         PyErr_SetString(PyExc_ValueError, "Argument must have be square, or pow must be positive!");
         return NULL;
     }
@@ -431,7 +431,7 @@ PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
         return NULL;
     }
-    pow_matrix(result, self->mat, (int) pow);
+    pow_matrix(result, self->mat, (long) pow);
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
@@ -493,7 +493,7 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
         return NULL;
     }
     int res = get(self->mat, i, j);
-    return res;
+    return (PyObject *) res;
 }
 
 /*

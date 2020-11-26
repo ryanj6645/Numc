@@ -286,7 +286,29 @@ PyObject *Matrix61c_repr(PyObject *self) {
  * self, and the second operand can be obtained by casting `args`.
  */
 PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
-    /* TODO: YOUR CODE HERE */
+    if (!PyObject_TypeCheck(args, &Matrix61cType)){
+        PyErr_SetString(PyExc_TypeError, "Argument must have type numc.Matrix!");
+        return NULL;
+    }
+    int rowsA = self->mat->rows;
+    int colsA = self->mat->cols;
+    int rowsB = args->mat->rows;
+    int colsB = args->mat->cols;
+    if(rowsA != rowsB || colsA != colsB){
+        PyErr_SetString(PyExc_ValueError, "Argument must have same dimensions!");
+        return NULL;
+    }
+    matrix *result;
+    int alloc_failed = allocate_matrix(&result, rowsA, colsA);
+    if (alloc_failed) {
+        PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+        return NULL;
+    }
+    add_matrix(result, &(self->mat), &(((Matrix61c *) args)->mat));
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    rv->mat = result;
+    rv->shape = get_shape(result->rows, result->cols);
+    return rv;
 }
 
 /*
@@ -294,7 +316,29 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
  * self, and the second operand can be obtained by casting `args`.
  */
 PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
-    /* TODO: YOUR CODE HERE */
+    if (!PyObject_TypeCheck(args, &Matrix61cType)){
+        PyErr_SetString(PyExc_TypeError, "Argument must have type numc.Matrix!");
+        return NULL;
+    }
+    int rowsA = self->mat->rows;
+    int colsA = self->mat->cols;
+    int rowsB = args->mat->rows;
+    int colsB = args->mat->cols;
+    if(rowsA != rowsB || colsA != colsB){
+        PyErr_SetString(PyExc_ValueError, "Argument must have same dimensions!");
+        return NULL;
+    }
+    matrix *result;
+    int alloc_failed = allocate_matrix(&result, rowsA, colsA);
+    if (alloc_failed) {
+        PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+        return NULL;
+    }
+    sub_matrix(result, &(self->mat), &(((Matrix61c *) args)->mat));
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    rv->mat = result;
+    rv->shape = get_shape(result->rows, result->cols);
+    return rv;
 }
 
 /*
@@ -302,28 +346,96 @@ PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
  * can be obtained by casting `args`.
  */
 PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
-    /* TODO: YOUR CODE HERE */
+    if (!PyObject_TypeCheck(args, &Matrix61cType)){
+        PyErr_SetString(PyExc_TypeError, "Argument must have type numc.Matrix!");
+        return NULL;
+    }
+    int rowsA = self->mat->rows;
+    int colsA = self->mat->cols;
+    int rowsB = args->mat->rows;
+    int colsB = args->mat->cols;
+    if(colsA != rowsB){
+        PyErr_SetString(PyExc_ValueError, "Argument must have same dimensions!");
+        return NULL;
+    }
+    matrix *result;
+    int alloc_failed = allocate_matrix(&result, rowsA, colsB);
+    if (alloc_failed) {
+        PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+        return NULL;
+    }
+    mul_matrix(result, &(self->mat), &(((Matrix61c *) args)->mat));
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    rv->mat = result;
+    rv->shape = get_shape(result->rows, result->cols);
+    return rv;
 }
 
 /*
  * Negates the given numc.Matrix.
  */
 PyObject *Matrix61c_neg(Matrix61c* self) {
-    /* TODO: YOUR CODE HERE */
+    int rowsA = self->mat->rows;
+    int colsA = self->mat->cols;
+    matrix *result;
+    int alloc_failed = allocate_matrix(&result, rowsA, colsA);
+    if (alloc_failed) {
+        PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+        return NULL;
+    }
+    neg_matrix(result, &(self->mat));
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    rv->mat = result;
+    rv->shape = get_shape(result->rows, result->cols);
+    return rv;
 }
 
 /*
  * Take the element-wise absolute value of this numc.Matrix.
  */
 PyObject *Matrix61c_abs(Matrix61c *self) {
-    /* TODO: YOUR CODE HERE */
+    int rowsA = self->mat->rows;
+    int colsA = self->mat->cols;
+    matrix *result;
+    int alloc_failed = allocate_matrix(&result, rowsA, colsA);
+    if (alloc_failed) {
+        PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+        return NULL;
+    }
+    abs_matrix(result, &(self->mat));
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    rv->mat = result;
+    rv->shape = get_shape(result->rows, result->cols);
+    return rv;
 }
 
 /*
  * Raise numc.Matrix (Matrix61c) to the `pow`th power. You can ignore the argument `optional`.
+ * TypeError if pow is not an integer.
+ * ValueError if a is not a square matrix or if pow is negative.
  */
 PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
-    /* TODO: YOUR CODE HERE */
+    if (!PyObject_TypeCheck(args, &int)){
+        PyErr_SetString(PyExc_TypeError, "Argument must have type int!");
+        return NULL;
+    }
+    int rowsA = self->mat->rows;
+    int colsA = self->mat->cols;
+    if(rowsA != colsA || (int) pow < 0){
+        PyErr_SetString(PyExc_ValueError, "Argument must have be square, or pow must be positive!");
+        return NULL;
+    }
+    matrix *result;
+    int alloc_failed = allocate_matrix(&result, rowsA, colsA);
+    if (alloc_failed) {
+        PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+        return NULL;
+    }
+    pow_matrix(result, &(self->mat), &((int) pow));
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    rv->mat = result;
+    rv->shape = get_shape(result->rows, result->cols);
+    return rv;
 }
 
 /*
@@ -331,7 +443,12 @@ PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
  * define. You might find this link helpful: https://docs.python.org/3.6/c-api/typeobj.html
  */
 PyNumberMethods Matrix61c_as_number = {
-    /* TODO: YOUR CODE HERE */
+    .nb_add = (binaryfunc) Matrix61c_add,
+    .nb_sub = (binaryfunc) Matrix61c_sub,
+    .nb_multiply = (binaryfunc) Matrix61c_multiply,
+    .nb_negative = (unaryfunc) Matrix61c_neg,
+    .nb_absolute = (unaryfunc) Matrix61c_abs,
+    .nb_power = (ternaryfunc) Matrix61c_pow
 };
 
 
@@ -343,6 +460,19 @@ PyNumberMethods Matrix61c_as_number = {
  */
 PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
+    int i;
+    int j;
+    double val;
+    if (!PyArg_ParseTuple(args, "iid", &i, &j, &val)) {
+        PyErr_SetString(PyExc_TypeError, "Either number of arguments is != 3; i, j are not integers; or val is not a double, int.");
+        return NULL;
+    }
+    if(i >= self->mat->rows || j >= self->mat->cols){
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds!");
+        return NULL;
+    }
+    set(&(self->mat), i, j, val);
+    return Py_None;
 }
 
 /*
@@ -352,6 +482,18 @@ PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
  */
 PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
+    int i;
+    int j;
+    if (!PyArg_ParseTuple(args, "iid", &i, &j)) {
+        PyErr_SetString(PyExc_TypeError, "Either number of arguments is != 2; i, j are not integers.");
+        return NULL;
+    }
+    if(i >= self->mat->rows || j >= self->mat->cols){
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds!");
+        return NULL;
+    }
+    int res = get(&(self->mat), i, j);
+    return res;
 }
 
 /*
@@ -362,7 +504,8 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
  */
 PyMethodDef Matrix61c_methods[] = {
     /* TODO: YOUR CODE HERE */
-    {NULL, NULL, 0, NULL}
+    {"set", (PyCFunction)Matrix61c_set_value, 2, "Sets the value of a (i,j) of a matrix"},
+    {"get", (PyCFunction)Matrix61c_get_value, 2, "Gets the value of a (i,j) of a matrix"}
 };
 
 /* INDEXING */

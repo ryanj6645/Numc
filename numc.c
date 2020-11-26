@@ -415,7 +415,7 @@ PyObject *Matrix61c_abs(Matrix61c *self) {
  * ValueError if a is not a square matrix or if pow is negative.
  */
 PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
-    if (!PyObject_TypeCheck(args, &int)){
+    if (!PyLong_Check(pow)){
         PyErr_SetString(PyExc_TypeError, "Argument must have type int!");
         return NULL;
     }

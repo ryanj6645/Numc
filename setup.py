@@ -7,7 +7,7 @@ def main():
     # Use the setup function we imported and set up the modules.
     # You may find this reference helpful: https://docs.python.org/3.6/extending/building.html
     # TODO: YOUR CODE HERE
-    module1 = Extension('matrix',
+    module1 = Extension('numc',
                             sources = ['matrix.c', 'numc.c'],
                             extra_compile_args = CFLAGS,
                             extra_link_args = LDFLAGS)

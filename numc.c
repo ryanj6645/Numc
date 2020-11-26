@@ -292,8 +292,8 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     }
     int rowsA = self->mat->rows;
     int colsA = self->mat->cols;
-    int rowsB = ((Matrix61c) args)->mat->rows;
-    int colsB = ((Matrix61c) args)->mat->cols;
+    int rowsB = (((Matrix61c) args)->mat)->rows;
+    int colsB = (((Matrix61c) args)->mat)->cols;
     if(rowsA != rowsB || colsA != colsB){
         PyErr_SetString(PyExc_ValueError, "Argument must have same dimensions!");
         return NULL;
@@ -304,11 +304,11 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
         return NULL;
     }
-    add_matrix(result, self->mat, ((Matrix61c *) args)->mat));
+    add_matrix(result, self->mat, ((Matrix61c *) args)->mat);
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
-    return rv;
+    return &rv;
 }
 
 /*
@@ -334,7 +334,7 @@ PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
         return NULL;
     }
-    sub_matrix(result, &(self->mat), &(((Matrix61c *) args)->mat));
+    sub_matrix(result, (self->mat), (((Matrix61c *) args)->mat));
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);

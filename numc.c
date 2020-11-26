@@ -492,7 +492,7 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds!");
         return NULL;
     }
-    int res = get(self->mat, i, j);
+    long res = get(self->mat, i, j);
     return (PyObject *) res;
 }
 

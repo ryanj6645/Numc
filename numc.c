@@ -506,7 +506,7 @@ PyMethodDef Matrix61c_methods[] = {
     /* TODO: YOUR CODE HERE */
     {"set", (PyCFunction)Matrix61c_set_value, 2, "Sets the value of a (i,j) of a matrix"},
     {"get", (PyCFunction)Matrix61c_get_value, 2, "Gets the value of a (i,j) of a matrix"},
-    {NULL, NULL, 0, NULL}
+    {NULL}
 };
 
 /* INDEXING */

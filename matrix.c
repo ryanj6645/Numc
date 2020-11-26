@@ -143,7 +143,6 @@ void deallocate_matrix(matrix *mat) {
         free(mat->data);
     }
     free(mat);
-    return 0;
 }
 
 /*

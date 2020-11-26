@@ -308,7 +308,7 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
-    return (PyObject) rv;
+    return (PyObject *) rv;
 }
 
 /*
@@ -322,8 +322,8 @@ PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
     }
     int rowsA = self->mat->rows;
     int colsA = self->mat->cols;
-    int rowsB = ((Matrix61c) args)->mat->rows;
-    int colsB = ((Matrix61c) args)->mat->cols;
+    int rowsB = ((Matrix61c *) args)->mat->rows;
+    int colsB = ((Matrix61c *) args)->mat->cols;
     if(rowsA != rowsB || colsA != colsB){
         PyErr_SetString(PyExc_ValueError, "Argument must have same dimensions!");
         return NULL;
@@ -338,7 +338,7 @@ PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
-    return rv;
+    return (PyObject *) rv;
 }
 
 /*
@@ -352,8 +352,8 @@ PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
     }
     int rowsA = self->mat->rows;
     int colsA = self->mat->cols;
-    int rowsB = ((Matrix61c) args)->mat->rows;
-    int colsB = ((Matrix61c) args)->mat->cols;
+    int rowsB = ((Matrix61c *) args)->mat->rows;
+    int colsB = ((Matrix61c *) args)->mat->cols;
     if(colsA != rowsB){
         PyErr_SetString(PyExc_ValueError, "Argument must have same dimensions!");
         return NULL;
@@ -368,7 +368,7 @@ PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
-    return rv;
+    return (PyObject *) rv;
 }
 
 /*
@@ -383,11 +383,11 @@ PyObject *Matrix61c_neg(Matrix61c* self) {
         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
         return NULL;
     }
-    neg_matrix(result, &(self->mat));
+    neg_matrix(result, self->mat);
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
-    return rv;
+    return (PyObject *) rv;
 }
 
 /*
@@ -402,11 +402,11 @@ PyObject *Matrix61c_abs(Matrix61c *self) {
         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
         return NULL;
     }
-    abs_matrix(result, &(self->mat));
+    abs_matrix(result, self->mat);
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
-    return rv;
+    return (PyObject *) rv;
 }
 
 /*
@@ -431,11 +431,11 @@ PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
         return NULL;
     }
-    pow_matrix(result, &(self->mat), &((int) pow));
+    pow_matrix(result, self->mat, (int) pow);
     Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = result;
     rv->shape = get_shape(result->rows, result->cols);
-    return rv;
+    return (PyObject *) rv;
 }
 
 /*
@@ -471,7 +471,7 @@ PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds!");
         return NULL;
     }
-    set(&(self->mat), i, j, val);
+    set(self->mat, i, j, val);
     return Py_None;
 }
 
@@ -492,7 +492,7 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds!");
         return NULL;
     }
-    int res = get(&(self->mat), i, j);
+    int res = get(self->mat, i, j);
     return res;
 }
 

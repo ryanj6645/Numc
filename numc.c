@@ -504,9 +504,9 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
  */
 PyMethodDef Matrix61c_methods[] = {
     /* TODO: YOUR CODE HERE */
-    {"set", (PyCFunction)Matrix61c_set_value, 2, "Sets the value of a (i,j) of a matrix"},
-    {"get", (PyCFunction)Matrix61c_get_value, 2, "Gets the value of a (i,j) of a matrix"},
-    {NULL}
+    {"set", (PyCFunction)Matrix61c_set_value, METH_VARARGS, "Sets the value of a (i,j) of a matrix"},
+    {"get", (PyCFunction)Matrix61c_get_value, METH_VARARGS, "Gets the value of a (i,j) of a matrix"},
+    {NULL, NULL, 0, NULL}
 };
 
 /* INDEXING */

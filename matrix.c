@@ -80,7 +80,8 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     (*mat)->cols = cols;
     (*mat)->ref_cnt = 1;
     (*mat)->parent = NULL;
-    (*mat)->is_1d = rows * cols;
+    // if rows = 1 or cols = 1, then is_1d is 1, o.w. 0.
+    (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
     (*mat)->data = (double **) malloc(rows * sizeof(double *));
     if (!(*mat)->data) {
         free(mat);

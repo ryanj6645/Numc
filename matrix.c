@@ -119,8 +119,8 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
     (*mat)->ref_cnt = from->ref_cnt + 1;
     from->ref_cnt = from->ref_cnt + 1;
     // CHANGED r <= ROWS to r < ROWS!!
-    for (int r = row_offset; r < rows; r++) {
-        for (int c = col_offset; c < cols; c++) {
+    for (int r = row_offset; r <= rows; r++) {
+        for (int c = col_offset; c <= cols; c++) {
             (*mat)->data[r - row_offset][c - col_offset] = from->data[r][c];
         }
     }

@@ -16,5 +16,6 @@ def subscript_test1():
     a = nc.Matrix(3, 1)
     a[0]
 
+subscript_test1()
 subscript_test()
 test_small_add()

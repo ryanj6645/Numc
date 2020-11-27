@@ -511,10 +511,6 @@ PyMethodDef Matrix61c_methods[] = {
 
 /* INDEXING */
 
-long conv(Py_ssize_t* key) {
-    return PyLong_AsLong(PyLong_FromSsize_t(*key));
-}
-
 /*
  * Given a numc.Matrix `self`, index into it with `key`. Return the indexed result.
  */
@@ -523,6 +519,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     int cols = self->mat->cols;
     if (rows == 1 || cols == 1) {
         if (PyLong_Check(key)) {
+            // FIXED, BUT CHECK NEGATIVE INDICIES
             if (rows == 1) {
                 int out = get(self->mat, 0, PyLong_AsLong(key));
                 return (PyObject *) PyLong_FromLong(((long) out));
@@ -538,7 +535,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             matrix *mat;
             int alloc_failed = 0;
             if (rows == 1) {
-                if(!PySlice_GetIndicesEx(key, cols, &start1, &stop1, &step1, &sliceLength1)) {
+                if(PySlice_GetIndicesEx(key, cols, &start1, &stop1, &step1, &sliceLength1)) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                     return NULL;
                 }
@@ -551,7 +548,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                 }
                 alloc_failed = allocate_matrix_ref(&mat, self->mat, 0, start1, 1, stop1 - start1);
             } else if (cols == 1) {
-                if(!PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
+                if(PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                     return NULL;
                 }
@@ -594,7 +591,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             Py_ssize_t stop1;
             Py_ssize_t step1;
             Py_ssize_t sliceLength1;
-            if(!PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
+            if(PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
                 PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                 return NULL;
             }
@@ -629,7 +626,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     Py_ssize_t stop2;
                     Py_ssize_t step2;
                     Py_ssize_t sliceLength2;
-                    if(!PySlice_GetIndicesEx(&index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
+                    if(PySlice_GetIndicesEx(&index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
                     }
@@ -658,7 +655,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     Py_ssize_t stop1;
                     Py_ssize_t step1;
                     Py_ssize_t sliceLength1;
-                    if(!PySlice_GetIndicesEx(&index1, rows, &start1, &stop1, &step1, &sliceLength1)) {
+                    if(PySlice_GetIndicesEx(&index1, rows, &start1, &stop1, &step1, &sliceLength1)) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
                     }
@@ -688,8 +685,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     Py_ssize_t stop2;
                     Py_ssize_t step2;
                     Py_ssize_t sliceLength2;
-                    if(!PySlice_GetIndicesEx(&index1, rows, &start1, &stop1, &step1, &sliceLength1) ||
-                        !PySlice_GetIndicesEx(&index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
+                    if(PySlice_GetIndicesEx(&index1, rows, &start1, &stop1, &step1, &sliceLength1) ||
+                        PySlice_GetIndicesEx(&index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
                     }
@@ -725,6 +722,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     v = Matrix61c_subscript(self, key);
+    ((Matrix61c *) v)->mat->cols;
+    v
     return 0;
 }
 

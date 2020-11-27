@@ -110,11 +110,14 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
  */
 int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offset,
                         int rows, int cols) {
-    /* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */e
     if (row_offset >= rows || col_offset >= cols) {
         return -1;;
     }
-    allocate_matrix(mat, rows, cols);
+    int alloc_failed = allocate_matrix(mat, rows, cols);
+    if (alloc_failed) {
+        return alloc_failed;
+    }
     (*mat)->parent = from;
     (*mat)->ref_cnt = from->ref_cnt + 1;
     from->ref_cnt = from->ref_cnt + 1;
@@ -234,7 +237,10 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
     matrix *temp_m = NULL;
-    allocate_matrix(&temp_m, result->rows, result->cols);
+    int alloc_failed = allocate_matrix(&temp_m, result->rows, result->cols);
+    if (alloc_failed) {
+        return -1;
+    }
     for (int r = 0; r < mat1->rows; r++) {
         for (int c = 0; c < mat1->cols; c++) {
             temp_m->data[r][c] = mat1->data[r][c];

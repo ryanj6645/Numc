@@ -562,7 +562,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                     return NULL;
                 }
-                alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)start1, 0, (long)stop1 - (long)start1, 1);
+                alloc_failed = allocate_matrix_ref(&mat, self->mat, start1, 0, stop1 - start1, 1);
             }
             if (alloc_failed) {
                 PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
@@ -723,7 +723,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  * Given a numc.Matrix `self`, index into it with `key`, and set the indexed result to `v`.
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
-    /* TODO: YOUR CODE HERE */
+    v = Matrix61c_subscript(self, key);
+    return 0;
 }
 
 PyMappingMethods Matrix61c_mapping = {

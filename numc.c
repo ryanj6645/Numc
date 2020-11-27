@@ -580,7 +580,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         if (PyLong_Check(key)) {
             matrix *mat;
             // FIXED BY JAI
-            int alloc_failed = allocate_matrix_ref(&mat, self->mat, PyLong_AsLong(&key), 0, 1, cols);
+            int alloc_failed = allocate_matrix_ref(&mat, self->mat, PyLong_AsLong(key), 0, 1, cols);
             if (alloc_failed) {
                 PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
                 return NULL;

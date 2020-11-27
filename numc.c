@@ -521,10 +521,10 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         if (PyLong_Check(key)) {
             if (rows == 1) {
                 int out = get(self->mat, 1, (long) *key);
-                return (PyObject *) out;
+                return (PyObject *) ((long) out);
             } else if (cols == 1){
                 int out = get(self->mat,(long) *key, 1);
-                return (PyObject *) out;
+                return (PyObject *) ((long) out);
             }
         }else if (PySlice_Check(key)) {
             Py_ssize_t start1;
@@ -618,7 +618,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                 if (PyLong_Check(&index2)) {
                     long out;
                     out = get(self->mat, (long) index1, (long) index2);
-                    return (PyObject *) out;
+                    return (PyObject *) ((long) out);
                 }else if (PySlice_Check(&index2)) {
                     Py_ssize_t start2;
                     Py_ssize_t stop2;

@@ -621,7 +621,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             if (PyLong_Check(&index1)) {
                 if (PyLong_Check(&index2)) {
                     long out;
-                    out = get(self->mat, PyLong_AsLong(index1), PyLong_AsLong(index2));
+                    out = get(self->mat, PyLong_AsLong(&index1), PyLong_AsLong(&index2));
                     return (PyObject *) ((long) out);
                 }else if (PySlice_Check(&index2)) {
                     Py_ssize_t start2;
@@ -640,7 +640,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                         return NULL;
                     }
                     matrix *mat;
-                    int alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)index1, (long)start2, 1, (long)stop2 - (long)start2);
+                    int alloc_failed = allocate_matrix_ref(&mat, self->mat, PyLong_AsLong(index1), (long)start2, 1, (long)stop2 - (long)start2);
                     if (alloc_failed) {
                         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
                         return NULL;
@@ -669,7 +669,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                         return NULL;
                     }
                     matrix *mat;
-                    int alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)start1, (long)index2, (long)stop1 - (long)start1, 1);
+                    int alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)start1, PyLong_AsLong(index2), (long)stop1 - (long)start1, 1);
                     if (alloc_failed) {
                         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
                         return NULL;

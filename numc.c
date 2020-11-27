@@ -745,7 +745,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         Matrix61c* mod_mat = ((Matrix61c *)Matrix61c_subscript(self, key));
         int row = mod_mat->mat->rows;
         int col = mod_mat->mat->cols;
-        if (!mat_mod->mat->is_1d) {
+        if (!mod_mat->mat->is_1d) {
             for(int r = 0; r < row; r++){
                 for(int c = 0; c < col; c++){
                     mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(PyList_GetItem(v, r), c));
@@ -756,7 +756,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 for(int c = 0; c < col; c++){
                     if (row == 1)  {
                         mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(v, c));
-                    } else (col == 1) {
+                    } else if (col == 1) {
                         mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(v, r));
                     }
                 }

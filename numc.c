@@ -511,6 +511,10 @@ PyMethodDef Matrix61c_methods[] = {
 
 /* INDEXING */
 
+long conv(Py_ssize_t* key) {
+    return PyLong_AsLong(PyLong_FromSsize_t(*key));
+}
+
 /*
  * Given a numc.Matrix `self`, index into it with `key`. Return the indexed result.
  */
@@ -545,7 +549,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                     return NULL;
                 }
-                alloc_failed = allocate_matrix_ref(&mat, (matrix) self->mat, 0, (long)start1, 1, (long)stop1 - (long)start1);
+                alloc_failed = allocate_matrix_ref(&mat, (matrix) self->mat, 0, conv(&start1), 1, conv(&stop1) - conv(&start1));
             } else if (cols == 1) {
                 if(!PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");

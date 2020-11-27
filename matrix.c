@@ -110,13 +110,13 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
  */
 int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offset,
                         int rows, int cols) {
-    /* TODO: YOUR CODE HERE */e
+    /* TODO: YOUR CODE HERE */
     if (row_offset >= rows || col_offset >= cols) {
         return -1;;
     }
     int alloc_failed = allocate_matrix(mat, rows, cols);
     if (alloc_failed) {
-        return alloc_failed;
+        return -1;
     }
     (*mat)->parent = from;
     (*mat)->ref_cnt = from->ref_cnt + 1;

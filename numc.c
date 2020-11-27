@@ -624,7 +624,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     Py_ssize_t stop2;
                     Py_ssize_t step2;
                     Py_ssize_t sliceLength2;
-                    if(!PySlice_GetIndicesEx(index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
+                    if(!PySlice_GetIndicesEx(&index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
                     }
@@ -653,7 +653,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     Py_ssize_t stop1;
                     Py_ssize_t step1;
                     Py_ssize_t sliceLength1;
-                    if(!PySlice_GetIndicesEx(index1, rows, &start1, &stop1, &step1, &sliceLength1)) {
+                    if(!PySlice_GetIndicesEx(&index1, rows, &start1, &stop1, &step1, &sliceLength1)) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
                     }
@@ -683,8 +683,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     Py_ssize_t stop2;
                     Py_ssize_t step2;
                     Py_ssize_t sliceLength2;
-                    if(!PySlice_GetIndicesEx(index1, rows, &start1, &stop1, &step1, &sliceLength1) ||
-                        !PySlice_GetIndicesEx(index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
+                    if(!PySlice_GetIndicesEx(&index1, rows, &start1, &stop1, &step1, &sliceLength1) ||
+                        !PySlice_GetIndicesEx(&index2, cols, &start2, &stop2, &step2, &sliceLength2)) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
                     }

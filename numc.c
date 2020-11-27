@@ -518,9 +518,115 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     int rows = self->mat->rows;
     int cols = self->mat->cols;
     if (rows == 1 || cols == 1) {
-        
+        if (PyLong_Check(key)) {
+            matrix mat**;
+            int alloc_failed = allocate_matrix_ref(mat, self, (long)key, 0, (long)key + 1, cols);
+            if (alloc_failed) {
+                PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+                return NULL;
+            }
+            Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+            rv->mat = mat;
+            rv->shape = get_shape(mat->rows, mat->cols);
+            return (PyObject *) rv;
+        }else if (PySlice_Check(key)) {
+            Py_ssize_t start1;
+            Py_ssize_t stop1;
+            Py_ssize_t step1;
+            Py_ssize_t sliceLength1;
+            if(!PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
+                PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
+                return NULL;
+            }
+            if(step1 != 1) {
+                PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
+                return NULL;
+            } else if(sliceLength1 < 1) {
+                PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
+                return NULL;
+            }
+            matrix mat**;
+            int alloc_failed = allocate_matrix_ref(mat, self, (long)start1, 0, (long)stop1 + 1, cols);
+            if (alloc_failed) {
+                PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+                return NULL;
+            }
+            Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+            rv->mat = mat;
+            rv->shape = get_shape(mat->rows, mat->cols);
+            return (PyObject *) rv;
+        } else {
+            PyErr_SetString(PyExc_TypeError, "Key is not an integer, or slice!");
+            return NULL;
+        }
     } else {
+        if (PyLong_Check(key)) {
+            matrix mat**;
+            int alloc_failed = allocate_matrix_ref(mat, self, (long)key, 0, (long)key + 1, cols);
+            if (alloc_failed) {
+                PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+                return NULL;
+            }
+            Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+            rv->mat = mat;
+            rv->shape = get_shape(mat->rows, mat->cols);
+            return (PyObject *) rv;
+        }else if (PySlice_Check(key)) {
+            Py_ssize_t start1;
+            Py_ssize_t stop1;
+            Py_ssize_t step1;
+            Py_ssize_t sliceLength1;
+            if(!PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
+                PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
+                return NULL;
+            }
+            if(step1 != 1) {
+                PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
+                return NULL;
+            } else if(sliceLength1 < 1) {
+                PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
+                return NULL;
+            }
+            matrix mat**;
+            int alloc_failed = allocate_matrix_ref(mat, self, (long)start1, 0, (long)stop1 + 1, cols);
+            if (alloc_failed) {
+                PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+                return NULL;
+            }
+            Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+            rv->mat = mat;
+            rv->shape = get_shape(mat->rows, mat->cols);
+            return (PyObject *) rv;
+        } else if (PyTuple_Check(key)) {
+            PyObject index1;
+            PyObject index2;
+            pyArg_ParseTuple(args, "UU", &index1, &index2);
+            if (PyLong_Check(index1)) {
+                if (PyLong_Check(index2)) {
+                    matrix mat**;
+                    int alloc_failed = allocate_matrix_ref(mat, self, (long)index1, (long)index2, (long)index1 + 1, (long)index2 + 1);
+                    if (alloc_failed) {
+                        PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
+                        return NULL;
+                    }
+                    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+                    rv->mat = mat;
+                    rv->shape = get_shape(mat->rows, mat->cols);
+                    return (PyObject *) rv;
+                }else if (PySlice_Check(index2)) {
 
+                }
+            }else if (PySlice_Check(index1)) {
+                if (PyLong_Check(index2)) {
+
+                }else if (PySlice_Check(index2)) {
+
+                }
+            }
+        } else {
+            PyErr_SetString(PyExc_TypeError, "Key is not an integer, slice, or a length-2 tuple of slices/ints!");
+            return NULL;
+        }
     }
 }
 

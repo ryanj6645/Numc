@@ -727,8 +727,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  * Given a numc.Matrix `self`, index into it with `key`, and set the indexed result to `v`.
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
-    //Matrix61c_subscript(self, key)-> = v;
-    //return 0;
+    ((Matrix61c *)Matrix61c_subscript(self, key))->mat->data = v;
+    return 0;
 }
 
 PyMappingMethods Matrix61c_mapping = {

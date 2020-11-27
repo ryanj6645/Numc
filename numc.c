@@ -727,7 +727,18 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  * Given a numc.Matrix `self`, index into it with `key`, and set the indexed result to `v`.
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
-    ((Matrix61c *)Matrix61c_subscript(self, key))->mat->data = ((Matrix61c *)v)->mat->data;
+    if (PyLong_Check(v)) {
+
+    } else if (PyList_Check(v)) {
+        Matrix61c mod_mat = ((Matrix61c *)Matrix61c_subscript(self, key))->mat;
+        int row = mod_mat->rows;
+        int col = mod_mat->cols;
+        for(int r = 0; r < row; r++){
+            for(int c = 0; c < col; c++){
+                mod_mat->data[r][c]= v[r][c];
+            }
+        }
+    }
     return 0;
 }
 

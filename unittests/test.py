@@ -9,7 +9,7 @@ def test_small_add():
     print_speedup(speed_up)
 
 def subscript_test():
-    a = nc.Matrix(3, 1)
+    a = nc.Matrix(3, 3)
     a[0]
 
 subscript_test()

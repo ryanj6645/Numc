@@ -639,6 +639,10 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
                     }
+                    if (sliceLength2 == 1) {
+                        int out = get(self->mat, PyLong_AsLong(index1), (long) start2);
+                        return (PyObject *) PyLong_FromLong(((long) out));
+                    }
                     matrix *mat;
                     int alloc_failed = allocate_matrix_ref(&mat, self->mat, PyLong_AsLong(index1), (long)start2, 1, (long)stop2 - (long)start2);
                     if (alloc_failed) {
@@ -651,7 +655,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     return (PyObject *) rv;
 
                 }
-            }else if (PySlice_Check(index1)) {
+            } else if (PySlice_Check(index1)) {
                 if (PyLong_Check(index2)) {
                     Py_ssize_t start1;
                     Py_ssize_t stop1;
@@ -667,6 +671,10 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     } else if(sliceLength1 < 1) {
                         PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                         return NULL;
+                    }
+                    if (sliceLength1 == 1) {
+                        int out = get(self->mat, (long) start1, PyLong_AsLong(index2));
+                        return (PyObject *) PyLong_FromLong(((long) out));
                     }
                     matrix *mat;
                     int alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)start1, PyLong_AsLong(index2), (long)stop1 - (long)start1, 1);
@@ -728,17 +736,34 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     if (PyLong_Check(v)) {
-
+        // a[0:1,0:1]
+        // a[0][0]
+        // a[0,0]
+        //  a[0,0:1]
+        // a[0:1, 0]
     } else if (PyList_Check(v)) {
         Matrix61c* mod_mat = ((Matrix61c *)Matrix61c_subscript(self, key));
         int row = mod_mat->mat->rows;
         int col = mod_mat->mat->cols;
-        for(int r = 0; r < row; r++){
-            for(int c = 0; c < col; c++){
-                mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(PyList_GetItem(v, r), c));
+        if (!mat_mod->mat->is_1d) {
+            for(int r = 0; r < row; r++){
+                for(int c = 0; c < col; c++){
+                    mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(PyList_GetItem(v, r), c));
+                }
+            }
+        } else if (mat_mod->mat->is_1d) {
+            for(int r = 0; r < row; r++){
+                for(int c = 0; c < col; c++){
+                    if (row == 1)  {
+                        mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(v, c));
+                    } else (col == 1) {
+                        mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(v, r));
+                    }
+                }
             }
         }
-    }
+
+        }
     return 0;
 }
 

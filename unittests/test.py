@@ -30,8 +30,12 @@ def subscript_slice():
     a[0, 0:2]
     a[0:2,0:2]
 
+def subscript_set_slice():
+    a = nc.Matrix(3,3)
+    a[0:2, 0:2] = [[1, 2], [3, 4]]
 
 
+subscript_set_slice()
 subscript_slice()
 subscript_test1()
 subscript_test()

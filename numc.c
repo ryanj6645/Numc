@@ -524,10 +524,10 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     if (rows == 1 || cols == 1) {
         if (PyLong_Check(key)) {
             if (rows == 1) {
-                int out = get(self->mat, 1, PyLong_AsLong(key));
+                int out = get(self->mat, 0, PyLong_AsLong(key));
                 return (PyObject *) PyLong_FromLong(((long) out));
             } else if (cols == 1){
-                int out = get(self->mat, PyLong_AsLong(key), 1);
+                int out = get(self->mat, PyLong_AsLong(key), 0);
                 return (PyObject *) PyLong_FromLong(((long) out));
             }
         }else if (PySlice_Check(key)) {

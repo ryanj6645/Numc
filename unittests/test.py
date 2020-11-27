@@ -17,13 +17,22 @@ def subscript_test1():
     a[0]
 
 def subscript_slice():
-    a = nc.Matrix(3,1)
-    a.set(0,0,1)
-    a.set(1,0,2)
-    a.set(2,0,3)
-    a[0:2]
-    a[1:3]
+    a = nc.Matrix(3,3)
+    # count = 0
 
+    # for r in range(len(3)):
+    #     for c in range(len(3)):
+    #         a.set(r, c, count)
+    #         count += 1
+
+    a[0,0]
+    a[0:2, 0]
+    a[0, 0:2]
+    a[0:2,0:2]
+
+
+
+subscript_slice()
 subscript_test1()
 subscript_test()
 test_small_add()

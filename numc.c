@@ -515,7 +515,13 @@ PyMethodDef Matrix61c_methods[] = {
  * Given a numc.Matrix `self`, index into it with `key`. Return the indexed result.
  */
 PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
-    /* TODO: YOUR CODE HERE */
+    int rows = self->mat->rows;
+    int cols = self->mat->cols;
+    if (rows == 1 || cols == 1) {
+        
+    } else {
+
+    }
 }
 
 /*

@@ -615,7 +615,9 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         } else if (PyTuple_Check(key)) {
             PyObject* index1 = NULL;
             PyObject* index2 = NULL;
-            int x = PyArg_ParseTuple(key, "OO", index1, index2);
+            //PyArg_ParseTuple(key, "OO", index1, index2);
+            //PLEASE COMMIT OMG
+            PyArg_UnpackTuple(key, "args", 2, 2, &index1, &index2);
             if (PyLong_Check(index1)) {
                 if (PyLong_Check(index2)) {
                     long out;

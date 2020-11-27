@@ -531,10 +531,14 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                 return (PyObject *) ((long) out);
             }
         }else if (PySlice_Check(key)) {
-            Py_ssize_t start1;
-            Py_ssize_t stop1;
-            Py_ssize_t step1;
-            Py_ssize_t sliceLength1;
+            // Py_ssize_t start1;
+            // Py_ssize_t stop1;
+            // Py_ssize_t step1;
+            // Py_ssize_t sliceLength1;
+            long start1;
+            long stop1;
+            long step1;
+            long sliceLength1;
             matrix *mat;
             int alloc_failed = 0;
             if (rows == 1) {
@@ -549,7 +553,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                     return NULL;
                 }
-                alloc_failed = allocate_matrix_ref(&mat, (matrix) self->mat, 0, conv(&start1), 1, conv(&stop1) - conv(&start1));
+                alloc_failed = allocate_matrix_ref(&mat, (matrix) self->mat, 0, start1, 1, stop1 - start1);
             } else if (cols == 1) {
                 if(!PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");

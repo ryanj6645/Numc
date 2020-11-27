@@ -622,7 +622,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                 if (PyLong_Check(index2)) {
                     long out;
                     out = get(self->mat, PyLong_AsLong(index1), PyLong_AsLong(index2));
-                    return (PyObject *) ((long) out);
+                    return (PyObject *) PyLong_FromLong((long) out);
                 }else if (PySlice_Check(index2)) {
                     Py_ssize_t start2;
                     Py_ssize_t stop2;

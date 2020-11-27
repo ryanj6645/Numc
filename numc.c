@@ -535,10 +535,10 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             // Py_ssize_t stop1;
             // Py_ssize_t step1;
             // Py_ssize_t sliceLength1;
-            int start1;
-            int stop1;
-            int step1;
-            int sliceLength1;
+            long start1;
+            long stop1;
+            long step1;
+            long sliceLength1;
             matrix *mat;
             int alloc_failed = 0;
             if (rows == 1) {

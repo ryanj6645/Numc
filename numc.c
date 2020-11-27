@@ -522,7 +522,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     int rows = self->mat->rows;
     int cols = self->mat->cols;
     if (rows == 1 || cols == 1) {
-        if (1) {
+        if (PyLong_Check(key)) {
             if (rows == 1) {
                 int out = get(self->mat, 1, PyLong_AsLong(key));
                 return (PyObject *) ((long) out);

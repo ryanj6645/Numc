@@ -23,6 +23,12 @@ class TestAdd(TestCase):
         # TODO: YOUR CODE HERE
         pass
 
+class TestSubscript(TestCase):
+    def test_small_add(self):
+        # TODO: YOUR CODE HERE
+        a = nc.Matrix(1,3)
+        a[0]
+
 class TestSub(TestCase):
     def test_small_sub(self):
         # TODO: YOUR CODE HERE

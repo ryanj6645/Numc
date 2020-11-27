@@ -619,7 +619,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             }else if (PySlice_Check(index1)) {
                 if (PyLong_Check(index2)) {
 
-                }else if (PySlice_Check(index2)) {
+                } else if (PySlice_Check(index2)) {
 
                 }
             }

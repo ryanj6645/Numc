@@ -758,36 +758,36 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             Py_ssize_t sliceLength1;
             matrix *mat;
             int alloc_failed = 0;
-            if (rows == 1) {
+            if (self->mat->rows == 1) {
                 if(PySlice_GetIndicesEx(key, cols, &start1, &stop1, &step1, &sliceLength1)) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
-                    return NULL;
+                    return -1;
                 }
                 if(step1 != 1) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
-                    return NULL;
+                    return -1;
                 } else if(sliceLength1 < 1) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
-                    return NULL;
+                    return -1;
                 }
                 alloc_failed = allocate_matrix_ref(&mat, self->mat, 0, start1, 1, stop1 - start1);
-            } else if (cols == 1) {
+            } else if (self->mat->cols == 1) {
                 if(PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
-                    return NULL;
+                    return -1;
                 }
                 if(step1 != 1) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
-                    return NULL;
+                    return -1;
                 } else if(sliceLength1 < 1) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
-                    return NULL;
+                    return -1;
                 }
                 alloc_failed = allocate_matrix_ref(&mat, self->mat, start1, 0, stop1 - start1, 1);
             }
             if (alloc_failed) {
                 PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
-                return NULL;
+                return -1;
             }
             mat->data[0][0] = PyLong_AsLong(v);
         }

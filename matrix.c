@@ -219,13 +219,12 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
     for (int r = 0; r < mat1->rows; r++) {
         for(int c = 0; c < mat2->cols; c++){
-            int temp = 0;
+            double temp = 0;
             for(int i = 0; i < mat1->cols; i++) {
                 temp = mat1->data[r][i] * mat2->data[i][c] + temp;
                 result->data[r][c] = temp;
             }
         }
-
     }
     return 0;
 }
@@ -247,7 +246,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
     for (int r = 0; r < temp_m->rows; r++) {
         for(int c = 0; c < mat2->cols; c++){
-            int temp = 0;
+            double temp = 0;
             for(int i = 0; i < temp_m->cols; i++) {
                 temp = temp_m->data[r][i] * mat2->data[i][c] + temp;
                 result->data[r][c] = temp;

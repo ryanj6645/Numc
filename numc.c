@@ -907,12 +907,12 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         int row = mod_mat->mat->rows;
         int col = mod_mat->mat->cols;
         if (!mod_mat->mat->is_1d) {
-            if (PyList_Size(v) == row) {
+            if (PyList_Size(v) != row) {
                 PyErr_setString(PyExc_ValueError, "V is of wrong size.");
                 return -1;
             }
             for(int r = 0; r < row; r++){
-                if (PyList_Size(PyList_GetItem(v, r)) == col) {
+                if (PyList_Size(PyList_GetItem(v, r)) != col) {
                     PyErr_setString(PyExc_ValueError, "V is of wrong size.");
                     return -1;
                 }
@@ -931,7 +931,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                         if(!PyLong_Check(PyList_GetItem(v, c)) && !PyFloat_Check(PyList_GetItem(v, c))){
                             PyErr_SetString(PyExc_ValueError, "An element of v is not a float or int");
                             return -1;
-                        } else if (PyList_Size(v) == col) {
+                        } else if (PyList_Size(v) != col) {
                             PyErr_setString(PyExc_ValueError, "V is of wrong size.");
                             return -1;
                         }
@@ -940,7 +940,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                         if(!PyLong_Check(PyList_GetItem(v, c)) && !PyFloat_Check(PyList_GetItem(v, r))){
                             PyErr_SetString(PyExc_ValueError, "An element of v is not a float or int");
                             return -1;
-                        } else if (PyList_Size(v) == row) {
+                        } else if (PyList_Size(v) != row) {
                             PyErr_setString(PyExc_ValueError, "V is of wrong size.");
                             return -1;
                         }

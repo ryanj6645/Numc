@@ -739,7 +739,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     if (PyLong_Check(v) || PyFloat_Check(v)) {
         if (!PyLong_Check(temp) || !PyFloat_Check(temp)) {
             PyErr_SetString(PyExc_TypeError, "Resulting slice is not 1 by 1, but v is not a list.");
-            return NULL;
+            return -1;
         }
         // a[0:1,0:1]
         // a[0][0]
@@ -749,7 +749,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     } else if (PyList_Check(v)) {
         if (PyLong_Check(temp) || PyFloat_Check(temp)) {
             PyErr_SetString(PyExc_TypeError, "Resulting slice is 1 by 1, but v is not a float or int.");
-            return NULL;
+            return -1;
         }
         Matrix61c* mod_mat = ((Matrix61c *) temp);
         int row = mod_mat->mat->rows;
@@ -759,7 +759,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 for(int c = 0; c < col; c++){
                     if(!PyLong_Check(PyList_GetItem(PyList_GetItem(v, r), c)) || !PyFloat_Check(PyList_GetItem(PyList_GetItem(v, r), c))){
                         PyErr_SetString(PyExc_ValueError, "An element of v is not a float or int");
-                        return NULL;
+                        return -1;
                     }
                     mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(PyList_GetItem(v, r), c));
                 }
@@ -770,21 +770,20 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                     if (row == 1)  {
                         if(!PyLong_Check(PyList_GetItem(v, c)) || !PyFloat_Check(PyList_GetItem(v, c))){
                             PyErr_SetString(PyExc_ValueError, "An element of v is not a float or int");
-                            return NULL;
+                            return -1;
                         }
                         mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(v, c));
                     } else if (col == 1) {
                         if(!PyLong_Check(PyList_GetItem(v, c)) || !PyFloat_Check(PyList_GetItem(v, r))){
                             PyErr_SetString(PyExc_ValueError, "An element of v is not a float or int");
-                            return NULL;
+                            return -1;
                         }
                         mod_mat->mat->data[r][c] = PyLong_AsLong(PyList_GetItem(v, r));
                     }
                 }
             }
         }
-
-        }
+    }
     return 0;
 }
 

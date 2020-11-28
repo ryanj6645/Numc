@@ -34,6 +34,11 @@ def subscript_set_slice():
     a = nc.Matrix(3,3)
     a[0:2, 0:2] = [[1, 2], [3, 4]]
 
+def powpow():
+    a = nc.Matrix(3,3,1)
+    a.set(1,1,0)
+    a = a ** 3
+
 
 subscript_set_slice()
 subscript_slice()

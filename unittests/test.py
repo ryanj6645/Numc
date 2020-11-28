@@ -39,7 +39,7 @@ def powpow():
     a.set(1,1,0)
     a = a ** 3
 
-
+powpow()
 subscript_set_slice()
 subscript_slice()
 subscript_test1()

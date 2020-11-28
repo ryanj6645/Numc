@@ -888,7 +888,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                   int alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)start1, (long)start2, (long)stop1 - (long)start1, (long)stop2 - (long)start2);
                   if (alloc_failed) {
                       PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
-                      return NULL;
+                      return -1;
                   }
                   mat->data[0][0] = PyLong_AsLong(v);
             }

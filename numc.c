@@ -484,7 +484,7 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
     int i;
     int j;
-    if (!PyArg_ParseTuple(args, "iid", &i, &j)) {
+    if (!PyArg_ParseTuple(args, "ii", &i, &j)) {
         PyErr_SetString(PyExc_TypeError, "Either number of arguments is != 2; i, j are not integers.");
         return NULL;
     }
@@ -492,8 +492,8 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds!");
         return NULL;
     }
-    long res = get(self->mat, i, j);
-    return (PyObject *) res;
+    double res = get(self->mat, i, j);
+    return (PyObject *) PyFloat_FromDouble(res);
 }
 
 /*

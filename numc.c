@@ -750,6 +750,8 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             return -1;
         }
         if (PyLong_Check(key)) {
+            matrix *mat;
+            int alloc_failed = 0;
             if (self->mat->rows == 1) {
                 alloc_failed = allocate_matrix_ref(&mat, self->mat, 0, PyLong_AsLong(key), 1, 1);
             } else if (self->mat->cols == 1) {

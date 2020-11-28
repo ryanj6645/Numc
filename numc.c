@@ -546,10 +546,10 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     PyErr_SetString(PyExc_ValueError, "Slice info not valid!");
                     return NULL;
                 }
-                if (sliceLength1 == 1) {
-                    int out = get(self->mat, 1, (long) start1);
-                    return (PyObject *) PyLong_FromLong(((long) out));
-                }
+                // if (sliceLength1 == 1) {
+                //     int out = get(self->mat, 1, (long) start1);
+                //     return (PyObject *) PyLong_FromLong(((long) out));
+                // }
                 alloc_failed = allocate_matrix_ref(&mat, self->mat, 0, start1, 1, stop1 - start1);
             } else if (cols == 1) {
                 if(PySlice_GetIndicesEx(key, rows, &start1, &stop1, &step1, &sliceLength1)) {

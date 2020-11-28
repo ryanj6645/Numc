@@ -735,7 +735,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  * Given a numc.Matrix `self`, index into it with `key`, and set the indexed result to `v`.
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
-    PyObject temp = Matrix61c_subscript(self, key);
+    PyObject* temp = Matrix61c_subscript(self, key);
     if (PyLong_Check(v) || PyFloat_Check(v)) {
         if (!PyLong_Check(temp) || !PyFloat_Check(temp)) {
             PyErr_SetString(PyExc_TypeError, "Resulting slice is not 1 by 1, but v is not a list.");

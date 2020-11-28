@@ -521,11 +521,11 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         if (PyLong_Check(key)) {
             // FIXED, BUT CHECK NEGATIVE INDICIES
             if (rows == 1) {
-                int out = get(self->mat, 0, PyLong_AsLong(key));
-                return (PyObject *) PyLong_FromLong(((long) out));
+                double out = get(self->mat, 0, PyLong_AsLong(key));
+                return (PyObject *) PyFloat_FromDouble(out);
             } else if (cols == 1){
-                int out = get(self->mat, PyLong_AsLong(key), 0);
-                return (PyObject *) PyLong_FromLong(((long) out));
+                double out = get(self->mat, PyLong_AsLong(key), 0);
+                return (PyObject *) PyFloat_FromDouble(out);
             }
         }else if (PySlice_Check(key)) {
             Py_ssize_t start1;
@@ -547,8 +547,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     return NULL;
                 }
                 if (sliceLength1 == 1) {
-                    int out = get(self->mat, 0, (long) start1);
-                    return (PyObject *) PyLong_FromLong(((long) out));
+                    double out = get(self->mat, 0, (long) start1);
+                    return (PyObject *) PyFloat_FromDouble(out);
                 }
                 alloc_failed = allocate_matrix_ref(&mat, self->mat, 0, start1, 1, stop1 - start1);
             } else if (cols == 1) {
@@ -564,8 +564,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                     return NULL;
                 }
                 if (sliceLength1 == 1) {
-                    int out = get(self->mat, (long) start1, 0);
-                    return (PyObject *) PyLong_FromLong(((long) out));
+                    double out = get(self->mat, (long) start1, 0);
+                    return (PyObject *) PyFloat_FromDouble(out);
                 }
                 alloc_failed = allocate_matrix_ref(&mat, self->mat, start1, 0, stop1 - start1, 1);
             }
@@ -626,9 +626,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             PyArg_UnpackTuple(key, "args", 2, 2, &index1, &index2);
             if (PyLong_Check(index1)) {
                 if (PyLong_Check(index2)) {
-                    long out;
-                    out = get(self->mat, PyLong_AsLong(index1), PyLong_AsLong(index2));
-                    return (PyObject *) PyLong_FromLong((long) out);
+                    double out = get(self->mat, PyLong_AsLong(index1), PyLong_AsLong(index2));
+                    return (PyObject *) PyFloat_FromDouble(out);
                 }else if (PySlice_Check(index2)) {
                     Py_ssize_t start2;
                     Py_ssize_t stop2;
@@ -646,8 +645,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                         return NULL;
                     }
                     if (sliceLength2 == 1) {
-                        int out = get(self->mat, PyLong_AsLong(index1), (long) start2);
-                        return (PyObject *) PyLong_FromLong(((long) out));
+                        double out = get(self->mat, PyLong_AsLong(index1), (long) start2);
+                        return (PyObject *) PyFloat_FromDouble(out);
                     }
                     matrix *mat;
                     int alloc_failed = allocate_matrix_ref(&mat, self->mat, PyLong_AsLong(index1), (long)start2, 1, (long)stop2 - (long)start2);
@@ -679,8 +678,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                         return NULL;
                     }
                     if (sliceLength1 == 1) {
-                        int out = get(self->mat, (long) start1, PyLong_AsLong(index2));
-                        return (PyObject *) PyLong_FromLong(((long) out));
+                        double out = get(self->mat, (long) start1, PyLong_AsLong(index2));
+                        return (PyObject *) PyFloat_FromDouble(out);
                     }
                     matrix *mat;
                     int alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)start1, PyLong_AsLong(index2), (long)stop1 - (long)start1, 1);
@@ -714,8 +713,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                         return NULL;
                     }
                     if (sliceLength1 == 1 && sliceLength2 == 1) {
-                        int out = get(self->mat, (long) start1, (long) start2);
-                        return (PyObject *) PyLong_FromLong(((long) out));
+                        double out = get(self->mat, (long) start1, (long) start2);
+                        return (PyObject *) PyFloat_FromDouble(out);
                     }
                     matrix *mat;
                     int alloc_failed = allocate_matrix_ref(&mat, self->mat, (long)start1, (long)start2, (long)stop1 - (long)start1, (long)stop2 - (long)start2);

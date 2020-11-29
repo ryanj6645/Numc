@@ -242,10 +242,10 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         result2 = _mm256_add_pd(m1rc2, m2rc2);
         result3 = _mm256_add_pd(m1rc3, m2rc3);
         result4 = _mm256_add_pd(m1rc4, m2rc4);
-        _mm256_storeu_pd(result->data[r] + c, result1);
-        _mm256_storeu_pd(result->data[r] + c + 4, result2);
-        _mm256_storeu_pd(result->data[r] + c + 8, result3);
-        _mm256_storeu_pd(result->data[r] + c + 12, result4);
+        _mm256_storeu_pd(result->data[i / mat1->cols] + (i % mat1->cols), result1);
+        _mm256_storeu_pd(result->data[i / mat1->cols] + (i % mat1->cols) + 4, result2);
+        _mm256_storeu_pd(result->data[i / mat1->cols] + (i % mat1->cols) + 8, result3);
+        _mm256_storeu_pd(result->data[i / mat1->cols] + (i % mat1->cols) + 12, result4);
         // result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
     }
     for(int i = (mat1->rows * mat1->cols)/16 * 16; i < (mat1->rows * mat1->cols); i+=1){

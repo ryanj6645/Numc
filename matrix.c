@@ -111,6 +111,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
 int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offset,
                         int rows, int cols) {
     /* TODO: YOUR CODE HERE */
+    // COPY ALLOCATE HERE
     int alloc_failed = allocate_matrix(mat, rows, cols);
     if (alloc_failed) {
         return -1;
@@ -181,27 +182,27 @@ void fill_matrix(matrix *mat, double val) {
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Can we remove this if statment?
-    // if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
-    //     return -1;
-    // }
-    // for (int r = 0; r < mat1->rows; r++) {
-    //     for(int c = 0; c < mat1->cols; c++){
-    //         result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
-    //     }
-    // }
-    // return 0;
-    int cols = mat1->cols;
+    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
+        return -1;
+    }
     for (int r = 0; r < mat1->rows; r++) {
-        for(int c = 0; c < cols/16 * 16; c+=16){
-            int *temp = result->data[r] + c;
-            __m256i sumSF1 = _mm_loadu_si256(temp);
-			__m256i sumSF2 = _mm_loadu_si256(temp + 4);
-			__m128i sumSF3 = _mm_loadu_si256(temp + 8);
-			__m128i sumSF4 = _mm_loadu_si256(temp + 12);
+        for(int c = 0; c < mat1->cols; c++){
             result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
         }
     }
     return 0;
+    // int cols = mat1->cols;
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for(int c = 0; c < cols/16 * 16; c+=16){
+    //         int *temp = result->data[r] + c;
+    //         __m256i sumSF1 = _mm_loadu_si256(temp);
+	// 		__m256i sumSF2 = _mm_loadu_si256(temp + 4);
+	// 		__m128i sumSF3 = _mm_loadu_si256(temp + 8);
+	// 		__m128i sumSF4 = _mm_loadu_si256(temp + 12);
+    //         result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
+    //     }
+    // }
+    // return 0;
 }
 
 /*
@@ -226,20 +227,27 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that matrix multiplication is not the same as multiplying individual elements.
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    if (mat1->cols != mat2->rows) {
-        return -1;
-    }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
-    for (int r = 0; r < mat1->rows; r++) {
-        for(int c = 0; c < mat2->cols; c++){
-            double temp = 0;
-            for(int i = 0; i < mat1->cols; i++) {
-                temp = mat1->data[r][i] * mat2->data[i][c] + temp;
-                result->data[r][c] = temp;
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for(int c = 0; c < mat2->cols; c++){
+    //         // double temp = 0;
+    //         for(int i = 0; i < mat1->cols; i++) {
+    //             // temp = mat1->data[r][i] * mat2->data[i][c] + temp;
+    //             // result->data[r][c] = temp;
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //         }
+    //     }
+    // }
+    // return 0;
+    for (int c = 0; c < mat2->cols; c++) {
+        for (int r = 0; r < mat1->rows; r++) {
+            for (int i = 0; i < mat1->cols; i++) {
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }
         }
     }
     return 0;
+
 }
 
 int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {

@@ -222,6 +222,14 @@ class TestMul(TestCase):
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
+    def test_large_mat(self):
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(1500, 1500, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(1500, 1500, seed=1)
+        is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
+
+
     # def test_large_mul(self):
     #     dp_mat1, nc_mat1 = rand_dp_nc_matrix(10000, 5678, seed=0)
     #     dp_mat2, nc_mat2 = rand_dp_nc_matrix(5678, 10000, seed=1)

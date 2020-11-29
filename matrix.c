@@ -236,24 +236,25 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
-    if (mat1->rows < 15 && mat2->cols < 15) {
+    // CAN ADD THIS CASE TO SPEED UP SMALL CASES
+    // if (mat1->rows < 15 && mat2->cols < 15) {
+    //     for (int r = 0; r < mat1->rows; r++) {
+    //         for(int c = 0; c < mat2->cols; c++){
+    //             // double temp = 0;
+    //             for(int i = 0; i < mat1->cols; i++) {
+    //                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //             }
+    //         }
+    //     }
+    // } else {
+    for (int c = 0; c < mat2->cols; c++) {
         for (int r = 0; r < mat1->rows; r++) {
-            for(int c = 0; c < mat2->cols; c++){
-                // double temp = 0;
-                for(int i = 0; i < mat1->cols; i++) {
-                    result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-                }
-            }
-        }
-    } else {
-        for (int c = 0; c < mat2->cols; c++) {
-            for (int r = 0; r < mat1->rows; r++) {
-                for (int i = 0; i < mat1->cols; i++) {
-                    result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-                }
+            for (int i = 0; i < mat1->cols; i++) {
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }
         }
     }
+    // }
     return 0;
 
 }

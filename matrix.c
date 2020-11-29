@@ -202,23 +202,23 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             double *temp2 = mat2->data[r] + c;
             // m1
             __m256d m1rc1 = _mm256_loadu_pd(temp1);
-			__m256d m1rc2 = _mm256_loadu_pd(temp1 + 8);
-			__m256d m1rc3 = _mm256_loadu_pd(temp1 + 16);
-			__m256d m1rc4 = _mm256_loadu_pd(temp1 + 24);
+			__m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
+			__m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
+			__m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
             // m2
             __m256d m2rc1 = _mm256_loadu_pd(temp2);
-			__m256d m2rc2 = _mm256_loadu_pd(temp2 + 8);
-			__m256d m2rc3 = _mm256_loadu_pd(temp2 + 16);
-			__m256d m2rc4 = _mm256_loadu_pd(temp2 + 24);
+			__m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
+			__m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
+			__m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
             // result adding
             result1 = _mm256_add_pd(m1rc1, m2rc1);
             result2 = _mm256_add_pd(m1rc2, m2rc2);
             result3 = _mm256_add_pd(m1rc3, m2rc3);
             result4 = _mm256_add_pd(m1rc4, m2rc4);
             _mm256_storeu_pd(result->data[r] + c, result1);
-            _mm256_storeu_pd(result->data[r] + c + 8, result2);
-            _mm256_storeu_pd(result->data[r] + c + 16, result3);
-            _mm256_storeu_pd(result->data[r] + c + 24, result4);
+            _mm256_storeu_pd(result->data[r] + c + 4, result2);
+            _mm256_storeu_pd(result->data[r] + c + 8, result3);
+            _mm256_storeu_pd(result->data[r] + c + 12, result4);
         }
         for (int i = cols/32 * 32; i < cols; i++) {
             result->data[r][i] = mat1->data[r][i] + mat2->data[r][i];

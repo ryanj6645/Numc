@@ -193,13 +193,13 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // return 0;
     int cols = mat1->cols;
     for (int r = 0; r < mat1->rows; r++) {
-        __m256d result1 = _mm_setzerosi256();
-        __m256d result2 = _mm_setzerosi256();
-        __m256d result3 = _mm_setzerosi256();
-        __m256d result4 = _mm_setzerosi256();
+        __m256d result1 = _mm256_setzero_pd();
+        __m256d result2 = _mm256_setzero_pd();
+        __m256d result3 = _mm256_setzero_pd();
+        __m256d result4 = _mm256_setzero_pd();
         for(int c = 0; c < cols/32 * 32; c+=32){
-            int *temp1 = mat1->data[r] + c;
-            int *temp2 = mat2->data[r] + c;
+            double *temp1 = mat1->data[r] + c;
+            double *temp2 = mat2->data[r] + c;
             // m1
             __m256d m1rc1 = _mm256_loadu_pd(temp1);
 			__m256d m1rc2 = _mm256_loadu_pd(temp1 + 8);

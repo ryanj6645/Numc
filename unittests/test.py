@@ -8,4 +8,4 @@ def test_medium_add(self):
     is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "add")
     print_speedup(speed_up)
 
-test_medium_add
+test_medium_add()

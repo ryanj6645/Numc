@@ -263,8 +263,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
     for (int i = 0; i < mat1->cols; i++) {
-        for (int c = 0; c < mat2->cols; c++) {
-            for (int r = 0; r < mat1->rows; r++) {
+        for (int r = 0; r < mat1->rows; r++) {
+            for (int c = 0; c < mat2->cols; c++) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }
         }

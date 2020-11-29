@@ -218,10 +218,37 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // return 0;
     //
     //
-    for(int i = 0; i < mat1->rows * mat1->cols ; i++){
+    // for(int i = 0; i < mat1->rows * mat1->cols ; i++){
+    //     result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
+    // }
+    // return 0;
+
+    for(int i = 0; i < (mat1->rows * mat1->cols)/16 * 16 ; i+=16){
+        __m256d result1 = _mm256_setzero_pd();
+        __m256d result2 = _mm256_setzero_pd();
+        __m256d result3 = _mm256_setzero_pd();
+        __m256d result4 = _mm256_setzero_pd();
+        double *temp1 = mat1->data[i / mat1->cols] + (i % mat1->cols);
+        double *temp2 = mat2->data[i / mat2->cols] + (i % mat2->cols);
+        __m256d m1rc1 = _mm256_loadu_pd(temp1);
+		__m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
+		__m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
+		__m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
+        __m256d m2rc1 = _mm256_loadu_pd(temp2);
+   		__m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
+   		__m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
+   		__m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
+        _mm256_storeu_pd(result->data[r] + c, result1);
+        _mm256_storeu_pd(result->data[r] + c + 4, result2);
+        _mm256_storeu_pd(result->data[r] + c + 8, result3);
+        _mm256_storeu_pd(result->data[r] + c + 12, result4);
+        // result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
+    }
+    for(int i = (mat1->rows * mat1->cols)/16 * 16; i < (mat1->rows * mat1->cols); i+=1){
         result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
     }
     return 0;
+
     // int cols = mat1->cols;
     // for (int r = 0; r < mat1->rows; r++) {
     //     __m256d result1 = _mm256_setzero_pd();

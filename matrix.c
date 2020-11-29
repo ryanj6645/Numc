@@ -180,11 +180,24 @@ void fill_matrix(matrix *mat, double val) {
  * Return 0 upon success and a nonzero value upon failure.
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
-        return -1;
-    }
+    // Can we remove this if statment?
+    // if (mat1->rows != mat2->rows || mat1->cols != mat2->cols) {
+    //     return -1;
+    // }
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for(int c = 0; c < mat1->cols; c++){
+    //         result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
+    //     }
+    // }
+    // return 0;
+    int cols = mat1->cols;
     for (int r = 0; r < mat1->rows; r++) {
-        for(int c = 0; c < mat1->cols; c++){
+        for(int c = 0; c < cols/16 * 16; c+=16){
+            int *temp = result->data[r] + c;
+            __m256i sumSF1 = _mm_loadu_si256(temp);
+			__m256i sumSF2 = _mm_loadu_si256(temp + 4);
+			__m128i sumSF3 = _mm_loadu_si256(temp + 8);
+			__m128i sumSF4 = _mm_loadu_si256(temp + 12);
             result->data[r][c] = mat1->data[r][c] + mat2->data[r][c];
         }
     }

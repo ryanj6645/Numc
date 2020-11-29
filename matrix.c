@@ -98,16 +98,12 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     //         return -1;
     //     }
     // }
-    for (int i = 0; i < (*mat)->rows/8 * 8; i += 8) {
+    for (int i = 0; i < (*mat)->rows/4 * 4; i += 4) {
         double *curr_row1 = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
         double *curr_row2 = (*mat)->data[i + 1] = calloc((*mat)->cols, sizeof(double));
         double *curr_row3 = (*mat)->data[i + 2] = calloc((*mat)->cols, sizeof(double));
         double *curr_row4 = (*mat)->data[i + 3] = calloc((*mat)->cols, sizeof(double));
-        double *curr_row5 = (*mat)->data[i + 4] = calloc((*mat)->cols, sizeof(double));
-        double *curr_row6 = (*mat)->data[i + 5] = calloc((*mat)->cols, sizeof(double));
-        double *curr_row7 = (*mat)->data[i + 6] = calloc((*mat)->cols, sizeof(double));
-        double *curr_row8 = (*mat)->data[i + 7] = calloc((*mat)->cols, sizeof(double));
-        if (!curr_row1 || !curr_row2 || !curr_row3 || !curr_row4 || !curr_row5 || !curr_row6 || !curr_row7 || !curr_row8) {
+        if (!curr_row1 || !curr_row2 || !curr_row3 || !curr_row4) {
             for (int x = 0; x < i; x++){
                 free((*mat)->data[x]);
             }
@@ -116,7 +112,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
             return -1;
         }
     }
-    for (int i = (*mat)->rows/8 * 8; i < (*mat)->rows; i += 1) {
+    for (int i = (*mat)->rows/4 * 4; i < (*mat)->rows; i += 1) {
         double *curr_row1 = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
         if (!curr_row1) {
             for (int x = 0; x < i; x++){

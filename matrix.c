@@ -197,7 +197,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         __m256d result2 = _mm256_setzero_pd();
         __m256d result3 = _mm256_setzero_pd();
         __m256d result4 = _mm256_setzero_pd();
-        for(int c = 0; c < cols/32 * 32; c+=32){
+        for(int c = 0; c < cols/16 * 16; c+=16){
             double *temp1 = mat1->data[r] + c;
             double *temp2 = mat2->data[r] + c;
             // m1
@@ -216,9 +216,9 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             result3 = _mm256_add_pd(m1rc3, m2rc3);
             result4 = _mm256_add_pd(m1rc4, m2rc4);
             _mm256_storeu_pd(result->data[r] + c, result1);
-            _mm256_storeu_pd(result->data[r] + c + 8, result2);
-            _mm256_storeu_pd(result->data[r] + c + 16, result3);
-            _mm256_storeu_pd(result->data[r] + c + 24, result4);
+            _mm256_storeu_pd(result->data[r] + c + 4, result2);
+            _mm256_storeu_pd(result->data[r] + c + 8, result3);
+            _mm256_storeu_pd(result->data[r] + c + 12, result4);
         }
         for (int i = cols/32 * 32; i < cols; i++) {
             result->data[r][i] = mat1->data[r][i] + mat2->data[r][i];

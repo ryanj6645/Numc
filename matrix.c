@@ -219,7 +219,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //
     //
     for(int i = 0; i < mat1->rows * mat1->cols ; i++){
-        result->data[i / mat1->cols][c % mat1->rows] = mat1->data[i / mat1->cols][c % mat1->rows] + mat2->data[i / mat1->cols][c % mat1->rows];
+        result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
     }
     return 0;
     // int cols = mat1->cols;

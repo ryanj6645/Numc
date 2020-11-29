@@ -87,9 +87,34 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         free(mat);
         return -1;
     }
-    for (int i = 0; i < (*mat)->rows; i++) {
-        double *curr_row = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
-        if (!curr_row) {
+    // for (int i = 0; i < (*mat)->rows; i++) {
+    //     double *curr_row = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
+    //     if (!curr_row) {
+    //         for (int x = 0; x < i; x++){
+    //             free((*mat)->data[x]);
+    //         }
+    //         free((*mat)->data);
+    //         free(*mat);
+    //         return -1;
+    //     }
+    // }
+    for (int i = 0; i < (*mat)->rows/4 * 4; i += 4) {
+        double *curr_row1 = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
+        double *curr_row2 = (*mat)->data[i + 1] = calloc((*mat)->cols, sizeof(double));
+        double *curr_row3 = (*mat)->data[i + 2] = calloc((*mat)->cols, sizeof(double));
+        double *curr_row4 = (*mat)->data[i + 3] = calloc((*mat)->cols, sizeof(double));
+        if (!curr_row1 || !curr_row2 || !curr_row3 || !curr_row4) {
+            for (int x = 0; x < i; x++){
+                free((*mat)->data[x]);
+            }
+            free((*mat)->data);
+            free(*mat);
+            return -1;
+        }
+    }
+    for (int i = (*mat)->rows/4 * 4; i < (*mat)->rows; i += 1) {
+        double *curr_row1 = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
+        if (!curr_row1) {
             for (int x = 0; x < i; x++){
                 free((*mat)->data[x]);
             }
@@ -193,43 +218,43 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // return 0;
     //
     //
-    // for(int i = 0; i < mat1->rows * mat1->cols ; i++){
-    //     result->data[i / mat1->cols][c] = mat1->data[r][c] + mat2->data[r][c];
-    // }
-    // return 0;
-    int cols = mat1->cols;
-    for (int r = 0; r < mat1->rows; r++) {
-        __m256d result1 = _mm256_setzero_pd();
-        __m256d result2 = _mm256_setzero_pd();
-        __m256d result3 = _mm256_setzero_pd();
-        __m256d result4 = _mm256_setzero_pd();
-        for(int c = 0; c < cols/16 * 16; c+=16){
-            double *temp1 = mat1->data[r] + c;
-            double *temp2 = mat2->data[r] + c;
-            // m1
-            __m256d m1rc1 = _mm256_loadu_pd(temp1);
-			__m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
-			__m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
-			__m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
-            // m2
-            __m256d m2rc1 = _mm256_loadu_pd(temp2);
-			__m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
-			__m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
-			__m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
-            // result adding
-            result1 = _mm256_add_pd(m1rc1, m2rc1);
-            result2 = _mm256_add_pd(m1rc2, m2rc2);
-            result3 = _mm256_add_pd(m1rc3, m2rc3);
-            result4 = _mm256_add_pd(m1rc4, m2rc4);
-            _mm256_storeu_pd(result->data[r] + c, result1);
-            _mm256_storeu_pd(result->data[r] + c + 4, result2);
-            _mm256_storeu_pd(result->data[r] + c + 8, result3);
-            _mm256_storeu_pd(result->data[r] + c + 12, result4);
-        }
-        for (int i = cols/16 * 16; i < cols; i++) {
-            result->data[r][i] = mat1->data[r][i] + mat2->data[r][i];
-        }
+    for(int i = 0; i < mat1->rows * mat1->cols ; i++){
+        result->data[i / mat1->cols][c % mat1->rows] = mat1->data[i / mat1->cols][c % mat1->rows] + mat2->data[i / mat1->cols][c % mat1->rows];
     }
+    return 0;
+    // int cols = mat1->cols;
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     __m256d result1 = _mm256_setzero_pd();
+    //     __m256d result2 = _mm256_setzero_pd();
+    //     __m256d result3 = _mm256_setzero_pd();
+    //     __m256d result4 = _mm256_setzero_pd();
+    //     for(int c = 0; c < cols/16 * 16; c+=16){
+    //         double *temp1 = mat1->data[r] + c;
+    //         double *temp2 = mat2->data[r] + c;
+    //         // m1
+    //         __m256d m1rc1 = _mm256_loadu_pd(temp1);
+	// 		__m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
+	// 		__m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
+	// 		__m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
+    //         // m2
+    //         __m256d m2rc1 = _mm256_loadu_pd(temp2);
+	// 		__m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
+	// 		__m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
+	// 		__m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
+    //         // result adding
+    //         result1 = _mm256_add_pd(m1rc1, m2rc1);
+    //         result2 = _mm256_add_pd(m1rc2, m2rc2);
+    //         result3 = _mm256_add_pd(m1rc3, m2rc3);
+    //         result4 = _mm256_add_pd(m1rc4, m2rc4);
+    //         _mm256_storeu_pd(result->data[r] + c, result1);
+    //         _mm256_storeu_pd(result->data[r] + c + 4, result2);
+    //         _mm256_storeu_pd(result->data[r] + c + 8, result3);
+    //         _mm256_storeu_pd(result->data[r] + c + 12, result4);
+    //     }
+    //     for (int i = cols/16 * 16; i < cols; i++) {
+    //         result->data[r][i] = mat1->data[r][i] + mat2->data[r][i];
+    //     }
+    // }
     return 0;
 }
 

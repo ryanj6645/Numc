@@ -83,7 +83,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     // if rows = 1 or cols = 1, then is_1d is 1, o.w. 0.
     (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
     (*mat)->data = (double **) malloc(rows * sizeof(double *));
-    (*mat)->data2 = (double) calloc(rows * cols, sizeof(double));
+    (*mat)->data2 = (double *) calloc(rows * cols, sizeof(double));
     if (!(*mat)->data || !(*mat)->data2) {
         free(mat);
         return -1;

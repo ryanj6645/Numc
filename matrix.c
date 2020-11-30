@@ -104,26 +104,26 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         double *curr_row2 = (*mat)->data[i + 1] = calloc((*mat)->cols, sizeof(double));
         double *curr_row3 = (*mat)->data[i + 2] = calloc((*mat)->cols, sizeof(double));
         double *curr_row4 = (*mat)->data[i + 3] = calloc((*mat)->cols, sizeof(double));
-        if (!curr_row1 || !curr_row2 || !curr_row3 || !curr_row4) {
-            for (int x = 0; x < i; x++){
-                free((*mat)->data[x]);
-            }
-            free((*mat)->data);
-            free(*mat);
-            return -1;
-        }
+        // if (!curr_row1 || !curr_row2 || !curr_row3 || !curr_row4) {
+        //     for (int x = 0; x < i; x++){
+        //         free((*mat)->data[x]);
+        //     }
+        //     free((*mat)->data);
+        //     free(*mat);
+        //     return -1;
+        // }
     }
     #pragma omp parallel for
     for (int i = (*mat)->rows/4 * 4; i < (*mat)->rows; i += 1) {
         double *curr_row1 = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
-        if (!curr_row1) {
-            for (int x = 0; x < i; x++){
-                free((*mat)->data[x]);
-            }
-            free((*mat)->data);
-            free(*mat);
-            return -1;
-        }
+        // if (!curr_row1) {
+        //     for (int x = 0; x < i; x++){
+        //         free((*mat)->data[x]);
+        //     }
+        //     free((*mat)->data);
+        //     free(*mat);
+        //     return -1;
+        // }
     }
     return 0;
 }

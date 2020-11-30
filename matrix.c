@@ -88,6 +88,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         free(mat);
         return -1;
     }
+    #pragma omp parallel for
     for (int i = 0; i < (*mat)->rows; i++) {
         (*mat)->data[i] = (*mat)->data2 + i * cols;
     }

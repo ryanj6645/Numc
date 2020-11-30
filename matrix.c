@@ -244,8 +244,8 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 		__m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
 		__m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
 		__m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
-        __m256d m2rc5 = _mm256_loadu_pd(temp2 + 16);
-		__m256d m2rc6 = _mm256_loadu_pd(temp2 + 20);
+        __m256d m1rc5 = _mm256_loadu_pd(temp2 + 16);
+		__m256d m1rc6 = _mm256_loadu_pd(temp2 + 20);
         __m256d m2rc1 = _mm256_loadu_pd(temp2);
    		__m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
    		__m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);

@@ -98,6 +98,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     //         return -1;
     //     }
     // }
+    #pragma omp parallel for
     for (int i = 0; i < (*mat)->rows/4 * 4; i += 4) {
         double *curr_row1 = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
         double *curr_row2 = (*mat)->data[i + 1] = calloc((*mat)->cols, sizeof(double));
@@ -112,6 +113,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
             return -1;
         }
     }
+    #pragma omp parallel for
     for (int i = (*mat)->rows/4 * 4; i < (*mat)->rows; i += 1) {
         double *curr_row1 = (*mat)->data[i] = calloc((*mat)->cols, sizeof(double));
         if (!curr_row1) {

@@ -539,7 +539,7 @@ int neg_matrix(matrix *result, matrix *mat) {
             //}
         }
         for (int i = cols/32 * 32; i < cols; i++) {
-            result->data[r][c] = -1 * mat->data[r][c];
+            result->data[r][i] = -1 * mat->data[r][i];
         }
     }
     return 0;
@@ -560,7 +560,6 @@ int abs_matrix(matrix *result, matrix *mat) {
     //       }
     //     }
     // }
-    __m256d _mm256_cmp_pd (__m256d a, __m256d b, const int imm8)
     int cols = mat->cols;
     #pragma omp parallel for
     for (int r = 0; r < mat->rows; r++) {

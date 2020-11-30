@@ -315,7 +315,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             //}
         }
         for (int i = cols/24 * 24; i < cols; i++) {
-            result->data[r][i] = mat1->data[r][i] - mat2->data[r][i];
+            result->data[r][i] = mat1->data[r][i] + mat2->data[r][i];
         }
     }
     return 0;

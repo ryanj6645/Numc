@@ -83,7 +83,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     // if rows = 1 or cols = 1, then is_1d is 1, o.w. 0.
     (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
     (*mat)->data = (double **) malloc(rows * sizeof(double *));
-    (*mat)->data2 = (double *) calloc(rows * cols * sizeof(double *));
+    (*mat)->data2 = (double) calloc(rows * cols, sizeof(double));
     if (!(*mat)->data || !(*mat)->data2) {
         free(mat);
         return -1;
@@ -286,12 +286,12 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             result2 = _mm256_add_pd(m1rc2, m2rc2);
             result3 = _mm256_add_pd(m1rc3, m2rc3);
             result4 = _mm256_add_pd(m1rc4, m2rc4);
-            #pragma omp critical {
+            //#pragma omp critical {
                 _mm256_storeu_pd(result->data[r] + c, result1);
                 _mm256_storeu_pd(result->data[r] + c + 4, result2);
                 _mm256_storeu_pd(result->data[r] + c + 8, result3);
                 _mm256_storeu_pd(result->data[r] + c + 12, result4);
-            }
+            //}
         }
         for (int i = cols/16 * 16; i < cols; i++) {
             result->data[r][i] = mat1->data[r][i] + mat2->data[r][i];

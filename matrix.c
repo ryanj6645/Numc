@@ -262,6 +262,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         __m256d result2 = _mm256_setzero_pd();
         __m256d result3 = _mm256_setzero_pd();
         __m256d result4 = _mm256_setzero_pd();
+        #pragma omp parallel for
         for(int c = 0; c < cols/16 * 16; c+=16){
             double *temp1 = mat1->data[r] + c;
             double *temp2 = mat2->data[r] + c;
@@ -363,9 +364,11 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
     for (int r = 0; r < temp_m->rows; r++) {
-        for(int i = 0; i < temp_m->cols; i++) {
-            for(int c = 0; c < mat2->cols; c++){
-                result->data[r][c] = temp_m->data[r][i] * mat2->data[i][c] + result->data[r][c];
+        for(int c = 0; c < mat2->cols; c++){
+            double temp = 0;
+            for(int i = 0; i < temp_m->cols; i++) {
+                temp = temp_m->data[r][i] * mat2->data[i][c] + temp;
+                result->data[r][c] = temp;
             }
         }
     }

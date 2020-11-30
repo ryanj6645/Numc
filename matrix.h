@@ -4,6 +4,7 @@ typedef struct matrix {
     int rows;      	// number of rows
     int cols;      	// number of columns
     double **data; 	// each element is a pointer to a row of data
+    double *data2;
     int is_1d;     	// Whether this matrix is a 1d matrix
     // For 1D matrix, shape is (rows * cols)
     int ref_cnt;

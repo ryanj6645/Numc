@@ -352,23 +352,23 @@ class TestGet(TestCase):
         dp_mat, nc_mat = rand_dp_nc_matrix(1, 1, seed=0)
         rand_row = np.random.randint(dp_mat.shape[0])
         rand_col = np.random.randint(0)
-        self.assertEqual(round(dp_mat[rand_row][rand_col], decimal_places),
-            round(nc_mat[rand_row][rand_col], decimal_places))
+        self.assertEqual(round(dp_mat[rand_row][0], decimal_places),
+            round(nc_mat[rand_row][0], decimal_places))
 
     def test_get_tall(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(1000, 1, seed=0)
         rand_row = np.random.randint(dp_mat.shape[0])
         rand_col = np.random.randint(0)
-        self.assertEqual(round(dp_mat[rand_row][rand_col], decimal_places),
-            round(nc_mat[rand_row][rand_col], decimal_places))
+        self.assertEqual(round(dp_mat[rand_row][0], decimal_places),
+            round(nc_mat[rand_row][0], decimal_places))
 
     def test_get_long(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(1, 1000, seed=0)
         rand_row = np.random.randint(0)
         rand_col = np.random.randint(dp_mat.shape[1])
-        self.assertEqual(round(dp_mat[rand_row][rand_col], decimal_places),
+        self.assertEqual(round(dp_mat[0][rand_col], decimal_places),
             round(nc_mat[rand_row][rand_col], decimal_places))
 
 
@@ -394,24 +394,24 @@ class TestSet(TestCase):
         dp_mat, nc_mat = rand_dp_nc_matrix(1, 1, seed=0)
         rand_row = np.random.randint(dp_mat.shape[0])
         rand_col = np.random.randint(0)
-        self.assertEquals(round(dp_mat[rand_row][rand_col], decimal_places),
-            round(nc_mat[rand_row][rand_col], decimal_places))
+        self.assertEquals(round(dp_mat[0][0], decimal_places),
+            round(nc_mat[0][0], decimal_places))
 
     def test_set_tall(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(1000, 1, seed=0)
         rand_row = np.random.randint(dp_mat.shape[0])
         rand_col = np.random.randint(0)
-        self.assertEquals(round(dp_mat[rand_row][rand_col], decimal_places),
-            round(nc_mat[rand_row][rand_col], decimal_places))
+        self.assertEquals(round(dp_mat[rand_row][0], decimal_places),
+            round(nc_mat[rand_row][0], decimal_places))
 
     def test_set_long(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(1, 1000, seed=0)
         rand_row = np.random.randint(0)
         rand_col = np.random.randint(dp_mat.shape[1])
-        self.assertEquals(round(dp_mat[rand_row][rand_col], decimal_places),
-            round(nc_mat[rand_row][rand_col], decimal_places))
+        self.assertEquals(round(dp_mat[0][rand_col], decimal_places),
+            round(nc_mat[0][rand_col], decimal_places))
 
 class TestShape(TestCase):
     def test_shape(self):

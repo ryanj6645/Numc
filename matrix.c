@@ -248,9 +248,9 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         _mm256_storeu_pd(result->data[i / mat1->cols] + (i % mat1->cols) + 12, result4);
         // result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
     }
-    // for(int i = (mat1->rows * mat1->cols)/16 * 16; i < (mat1->rows * mat1->cols); i+=1){
-    //     result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
-    // }
+    for(int i = (mat1->rows * mat1->cols)/16 * 16; i < (mat1->rows * mat1->cols); i+=1){
+        result->data[i / mat1->cols][i % mat1->rows] = mat1->data[i / mat1->cols][i % mat1->rows] + mat2->data[i / mat1->cols][i % mat1->rows];
+    }
     return 0;
 
     // int cols = mat1->cols;

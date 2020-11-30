@@ -177,7 +177,7 @@ void deallocate_matrix(matrix *mat) {
         //     free(mat->data[r]);
         // }
         free(mat->data);
-        free(mat->data2)
+        free(mat->data2);
     }
     free(mat);
 }

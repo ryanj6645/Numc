@@ -262,7 +262,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // return 0;
 
     int cols = mat1->cols;
-    #pragma omp parallel for
+    #pragma omp parallel for collapse(2)
     for (int r = 0; r < mat1->rows; r++) {
         __m256d result1 = _mm256_setzero_pd();
         __m256d result2 = _mm256_setzero_pd();

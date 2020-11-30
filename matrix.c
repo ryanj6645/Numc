@@ -611,10 +611,10 @@ int abs_matrix(matrix *result, matrix *mat) {
             //}
         }
         for (int i = cols/32 * 32; i < cols; i++) {
-            if(mat->data[r][c] < 0){
-                result->data[r][c] = -1 * mat->data[r][c];
+            if(mat->data[r][i] < 0){
+                result->data[r][i] = -1 * mat->data[r][i];
             }else{
-                result->data[r][c] = mat->data[r][c];
+                result->data[r][i] = mat->data[r][i];
             }
         }
     }

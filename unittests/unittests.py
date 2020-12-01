@@ -282,53 +282,53 @@ class TestPow(TestCase):
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
-    def test_large_long(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(1, 2000, seed=0)
-        is_correct, speed_up = compute([dp_mat, 0], [nc_mat, 0], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
+    # def test_large_long(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(1, 2000, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 0], [nc_mat, 0], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
 
-    def test_large_tall(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(2000, 1, seed=0)
-        is_correct, speed_up = compute([dp_mat, 0], [nc_mat, 0], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
+    # def test_large_tall(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(2000, 1, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 0], [nc_mat, 0], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
 
-    def test_large_long2(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(1, 12000, seed=0)
-        is_correct, speed_up = compute([dp_mat, 5], [nc_mat, 5], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
+    # def test_large_long2(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(1, 12000, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 5], [nc_mat, 5], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
 
-    def test_large_tall2(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(12000, 1, seed=0)
-        is_correct, speed_up = compute([dp_mat, 4], [nc_mat, 4], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
+    # def test_large_tall2(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(12000, 1, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 4], [nc_mat, 4], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
 
-    def test_large_long3(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(1, 12000, seed=0)
-        is_correct, speed_up = compute([dp_mat, 1], [nc_mat, 1], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
+    # def test_large_long3(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(1, 12000, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 1], [nc_mat, 1], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
+    #
+    # def test_large_tall3(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(12000, 1, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 1], [nc_mat, 1], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
 
-    def test_large_tall3(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(12000, 1, seed=0)
-        is_correct, speed_up = compute([dp_mat, 1], [nc_mat, 1], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
-
-    def el_diablo(self):
-        dp_mat, nc_mat = rand_dp_nc_matrix(12000, 7000, seed=0)
-        is_correct, speed_up = compute([dp_mat, 15], [nc_mat, 15], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
+    # def el_diablo(self):
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(12000, 7000, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 15], [nc_mat, 15], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
 
 class TestGet(TestCase):
     def test_get(self):

@@ -407,6 +407,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // } else {
+    #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols; c++) {
@@ -555,7 +556,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     // }
     int cols = mat->cols;
     #pragma omp parallel for
-    for (int r = 0; r < mat->rows; r++) {    
+    for (int r = 0; r < mat->rows; r++) {
         for(int c = 0; c < cols/24 * 24; c+=24){
             double *temp1 = mat->data[r] + c;
             __m256d result1 = _mm256_set1_pd(-1);

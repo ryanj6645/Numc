@@ -527,7 +527,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
         num = 2;
         mul_matrix(result, mat, mat);
-        while
+
 
         // mul_matrix(result, mat, mat);
         // if(num + num <= pow){

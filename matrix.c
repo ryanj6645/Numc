@@ -540,28 +540,18 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             }
         }
     } else if(pow >= 2){
-        // for (int i = 2; i < pow; i++) {
-        //     mul_matrix_pow(result, result, mat);
-        // }
-
-        int num = 2;
-        mul_matrix_pow(result, mat, mat);
-        while(num * 2 <= pow){
-            num = num * 2;
-            mul_matrix_pow(result, result, result);
-        }
-        for (int i = num; i < pow; i++) {
-             mul_matrix_pow(result, result, mat);
+        for (int i = 2; i < pow; i++) {
+            mul_matrix_pow(result, result, mat);
         }
 
-        // mul_matrix(result, mat, mat);
-        // if(num + num <= pow){
-        //     num = num + num;
-        //     pow_matrix(result, result, pow, mat, num);
+        // int num = 2;
+        // mul_matrix_pow(result, mat, mat);
+        // while(num * 2 <= pow){
+        //     num = num * 2;
+        //     mul_matrix_pow(result, result, result);
         // }
-        // while(num + oldnum <= pow){
-        //     num = num + oldnum;
-        //     pow_matrix(result, oldmatrix, pow, mat, pow);
+        // for (int i = num; i < pow; i++) {
+        //      mul_matrix_pow(result, result, mat);
         // }
 
 

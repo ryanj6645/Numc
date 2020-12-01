@@ -542,7 +542,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         //     mul_matrix_pow(result, result, mat);
         // }
 
-        int num = 2;
+        int num = 1;
         mul_matrix_pow(result, mat, mat);
         while(num * 2 <= pow){
             num = num * 2;

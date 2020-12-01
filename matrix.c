@@ -505,7 +505,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
-int pow_matrix(matrix *result, matrix *mat, int pow, int num, matrix *old) {
+int pow_matrix(matrix *result, matrix *mat, int pow) {
     if (pow == 0) {
         for (int r = 0; r < mat->rows; r++) {
             for (int c = 0; c < mat->cols; c++) {
@@ -529,13 +529,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow, int num, matrix *old) {
         // }
 
 
-        mul_matrix(result, mat, mat);
-        if(num * num <= pow){
-            mul_matrix_pow2(result, result, pow, num * num, mat);
-        }
-        if(num * sqrt(num) <= pow) {
-            mul_matrix_pow2(result, old, pow, num * sqrt(num), mat);
-        }
+        // mul_matrix(result, mat, mat);
+        // if(num * num <= pow){
+        //     mul_matrix_pow2(result, result, pow, num * num, mat);
+        // }
+        // if(num * sqrt(num) <= pow) {
+        //     mul_matrix_pow2(result, old, pow, num * sqrt(num), mat);
+        // }
 
 
     }

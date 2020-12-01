@@ -545,16 +545,21 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         //     mul_matrix_pow(result, result, mat);
         // }
 
-        int num = 2;
-        mul_matrix_pow(result, mat, mat);
-        while(num * 2 <= pow){
-            num = num * 2;
+        // int num = 2;
+        // mul_matrix_pow(result, mat, mat);
+        // while(num * 2 <= pow){
+        //     num = num * 2;
+        //     mul_matrix_pow(result, result, result);
+        // }
+        // for (int i = num; i < pow; i++) {
+        //      mul_matrix_pow(result, result, mat);
+        // }
+        pow_matrix(result, mat, pow/2)
+        if(pow & 1){
             mul_matrix_pow(result, result, result);
+            mul_matrix_pow(result, result, mat);
         }
-        for (int i = num; i < pow; i++) {
-             mul_matrix_pow(result, result, mat);
-        }
-
+        mul_matrix_pow(result, result, result);
 
     }
     return 0;

@@ -554,7 +554,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         // for (int i = num; i < pow; i++) {
         //      mul_matrix_pow(result, result, mat);
         // }
-        pow_matrix(result, mat, pow/2)
+        pow_matrix(result, mat, pow/2);
         if(pow & 1){
             mul_matrix_pow(result, result, result);
             mul_matrix_pow(result, result, mat);

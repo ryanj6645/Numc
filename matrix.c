@@ -540,6 +540,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             }
         }
     } else if(pow >= 2){
+        mul_matrix_pow(result, mat, mat);
         for (int i = 2; i < pow; i++) {
             mul_matrix_pow(result, result, mat);
         }

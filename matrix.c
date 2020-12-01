@@ -429,9 +429,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         __m256d result1 = _mm256_setzero_pd();
-        __m256d result2 = _mm256_setzero_pd();
-        __m256d result3 = _mm256_setzero_pd();
-        __m256d result4 = _mm256_setzero_pd();
+        // __m256d result2 = _mm256_setzero_pd();
+        // __m256d result3 = _mm256_setzero_pd();
+        // __m256d result4 = _mm256_setzero_pd();
         for (int i = 0; i < mat1->cols/16 * 16; i+=16) {
             double *temp1 = mat1->data[r] + i;
             for (int c = 0; c < mat2->cols/16 * 16; c+=16) {
@@ -525,9 +525,11 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         //     mul_matrix_pow(result, result, mat);
         // }
 
-        num = 2;
+        int num = 2;
         mul_matrix(result, mat, mat);
+        while(){
 
+        }
 
         // mul_matrix(result, mat, mat);
         // if(num + num <= pow){

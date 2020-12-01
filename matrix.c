@@ -415,14 +415,53 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for (int i = 0; i < mat1->cols; i++) {
+    //         for (int c = 0; c < mat2->cols; c+=4) {
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //             result->data[r][c + 1] = mat1->data[r][i] * mat2->data[i][c + 1] + result->data[r][c + 1];
+    //             result->data[r][c + 2] = mat1->data[r][i] * mat2->data[i][c + 2] + result->data[r][c + 2];
+    //             result->data[r][c + 3] = mat1->data[r][i] * mat2->data[i][c + 3] + result->data[r][c + 3];
+    //         }
+    //     }
+    // }
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
+        __m256d result1 = _mm256_setzero_pd();
+        __m256d result2 = _mm256_setzero_pd();
+        __m256d result3 = _mm256_setzero_pd();
+        __m256d result4 = _mm256_setzero_pd();
         for (int i = 0; i < mat1->cols; i++) {
-            for (int c = 0; c < mat2->cols; c+=4) {
+            double *temp1 = mat1->data[r] + i;
+            for (int c = 0; c < mat2->cols/16 * 16; c+=16) {
+                double *temp2 = mat2->data[i] + c;
+                // mat 1
+                __m256d m1rc1 = _mm256_loadu_pd(temp1);
+    			__m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
+    			__m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
+    			__m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
+                // mat 2
+                __m256d m2rc1 = _mm256_loadu_pd(temp2);
+    			__m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
+    			__m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
+    			__m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
+
+                _mm256_fmadd_pd(m1rc1, m2rc1, result1);
+                _mm256_fmadd_pd(m1rc2, m2rc2, result2);
+                _mm256_fmadd_pd(m1rc3, m2rc3, result3);
+                _mm256_fmadd_pd(m1rc4, m2rc4, result4);
+
+            }
+            _mm256_storeu_pd(result->data[r] + i, result1);
+            _mm256_storeu_pd(result->data[r] + i + 4, result2);
+            _mm256_storeu_pd(result->data[r] + i + 8, result3);
+            _mm256_storeu_pd(result->data[r] + i + 12, result4);
+
+        }
+        for (int i = 0; i < mat1->cols; i++) {
+            for (int c = mat2->cols/16 * 16; c < mat2->cols; c++) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-                result->data[r][c + 1] = mat1->data[r][i] * mat2->data[i][c + 1] + result->data[r][c + 1];
-                result->data[r][c + 2] = mat1->data[r][i] * mat2->data[i][c + 2] + result->data[r][c + 2];
-                result->data[r][c + 3] = mat1->data[r][i] * mat2->data[i][c + 3] + result->data[r][c + 3];
             }
         }
     }
@@ -466,10 +505,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
-int pow_matrix(matrix *result, matrix *mat, int pow) {
-    if (mat->rows != mat->cols || pow < 0) {
-        return -1;
-    }
+int pow_matrix(matrix *result, matrix *mat, int pow, int num, matrix *old) {
     if (pow == 0) {
         for (int r = 0; r < mat->rows; r++) {
             for (int c = 0; c < mat->cols; c++) {
@@ -487,11 +523,21 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
                 result->data[r][c] = mat->data[r][c];
             }
         }
-    } else {
+    } else if(pow >= 2){
+        // for (int i = 2; i < pow; i++) {
+        //     mul_matrix_pow(result, result, mat);
+        // }
+
+
         mul_matrix(result, mat, mat);
-        for (int i = 2; i < pow; i++) {
-            mul_matrix_pow(result, result, mat);
+        if(num * num <= pow){
+            mul_matrix_pow2(result, result, pow, num * num, mat);
         }
+        if(num * sqrt(num) <= pow) {
+            mul_matrix_pow2(result, old, pow, num * sqrt(num), mat);
+        }
+
+
     }
     return 0;
 }

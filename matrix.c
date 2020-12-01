@@ -436,9 +436,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         // __m256d result3 = _mm256_setzero_pd();
         // __m256d result4 = _mm256_setzero_pd();
         for (int i = 0; i < mat1->cols; i++) {
-            __m256d result1 = _mm256_setzero_pd();
-            double *temp1 = mat1->data[r] + i;
+
             for (int c = 0; c < mat2->cols/4 * 4; c+=4) {
+                __m256d result1 = _mm256_setzero_pd();
+                double *temp1 = mat1->data[r] + i;
                 double *temp2 = mat2->data[i] + c;
                 // mat 1
                 __m256d m1rc1 = _mm256_loadu_pd(temp1);

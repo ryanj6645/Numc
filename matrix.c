@@ -432,7 +432,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         __m256d result2 = _mm256_setzero_pd();
         __m256d result3 = _mm256_setzero_pd();
         __m256d result4 = _mm256_setzero_pd();
-        for (int i = 0; i < mat1->cols; i++) {
+        for (int i = 0; i < mat1->cols/16 * 16; i+=16) {
             double *temp1 = mat1->data[r] + i;
             for (int c = 0; c < mat2->cols/16 * 16; c+=16) {
                 double *temp2 = mat2->data[i] + c;
@@ -459,7 +459,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(result->data[r] + i + 12, result4);
 
         }
-        for (int i = 0; i < mat1->cols; i++) {
+        for (int i = mat1->cols/16 * 16; i < mat1->cols; i++) {
             for (int c = mat2->cols/16 * 16; c < mat2->cols; c++) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }
@@ -529,13 +529,15 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         // }
 
 
-        // mul_matrix(result, mat, mat);
-        // if(num * num <= pow){
-        //     mul_matrix_pow2(result, result, pow, num * num, mat);
-        // }
-        // if(num * sqrt(num) <= pow) {
-        //     mul_matrix_pow2(result, old, pow, num * sqrt(num), mat);
-        // }
+        mul_matrix(result, mat, mat);
+        if(num * num <= pow){
+            num = num * num;
+            mul_matrix_pow2(result, result, pow, num);
+        }
+        while(num * oldnum <= pow){
+            num = num * (int)sqrt(num);
+            mul_matrix_pow2(result, mat, pow);
+        }
 
 
     }

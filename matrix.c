@@ -418,11 +418,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         for (int i = 0; i < mat1->cols; i++) {
-            for (int c = 0; c < mat2->cols; c+=4) {
+            for (int c = 0; c < mat2->cols/4 * 4; c+=4) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
                 result->data[r][c + 1] = mat1->data[r][i] * mat2->data[i][c + 1] + result->data[r][c + 1];
                 result->data[r][c + 2] = mat1->data[r][i] * mat2->data[i][c + 2] + result->data[r][c + 2];
                 result->data[r][c + 3] = mat1->data[r][i] * mat2->data[i][c + 3] + result->data[r][c + 3];
+            }
+            for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }
         }
     }

@@ -415,56 +415,54 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
-    #pragma omp parallel for
-    for (int r = 0; r < mat1->rows; r++) {
-        for (int i = 0; i < mat1->cols; i++) {
-            for (int c = 0; c < mat2->cols/4 * 4; c+=4) {
-                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-                result->data[r][c + 1] = mat1->data[r][i] * mat2->data[i][c + 1] + result->data[r][c + 1];
-                result->data[r][c + 2] = mat1->data[r][i] * mat2->data[i][c + 2] + result->data[r][c + 2];
-                result->data[r][c + 3] = mat1->data[r][i] * mat2->data[i][c + 3] + result->data[r][c + 3];
-            }
-            for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
-                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-            }
-        }
-    }
     // #pragma omp parallel for
     // for (int r = 0; r < mat1->rows; r++) {
-    //     __m256d result1 = _mm256_setzero_pd();
-    //     // __m256d result2 = _mm256_setzero_pd();
-    //     // __m256d result3 = _mm256_setzero_pd();
-    //     // __m256d result4 = _mm256_setzero_pd();
-    //     for (int i = 0; i < mat1->cols/4 * 4; i+=4) {
-    //         double *temp1 = mat1->data[r] + i;
+    //     for (int i = 0; i < mat1->cols; i++) {
     //         for (int c = 0; c < mat2->cols/4 * 4; c+=4) {
-    //             double *temp2 = mat2->data[i] + c;
-    //             // mat 1
-    //             __m256d m1rc1 = _mm256_loadu_pd(temp1);
-    // 			// __m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
-    // 			// __m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
-    // 			// __m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
-    //             // mat 2
-    //             __m256d m2rc1 = _mm256_loadu_pd(temp2);
-    // 			// __m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
-    // 			// __m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
-    // 			// __m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
-    //
-    //             result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
-    //             // result1 = _mm256_fmadd_pd(m1rc2, m2rc2, result1);
-    //             // result1 = _mm256_fmadd_pd(m1rc3, m2rc3, result1);
-    //             // result1 = _mm256_fmadd_pd(m1rc4, m2rc4, result1);
-    //
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //             result->data[r][c + 1] = mat1->data[r][i] * mat2->data[i][c + 1] + result->data[r][c + 1];
+    //             result->data[r][c + 2] = mat1->data[r][i] * mat2->data[i][c + 2] + result->data[r][c + 2];
+    //             result->data[r][c + 3] = mat1->data[r][i] * mat2->data[i][c + 3] + result->data[r][c + 3];
     //         }
-    //         _mm256_storeu_pd(result->data[r] + i, result1);
-    //
-    //     }
-    //     for (int i = mat1->cols/4 * 4; i < mat1->cols; i++) {
     //         for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
     //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
     //         }
     //     }
     // }
+    #pragma omp parallel for
+    for (int r = 0; r < mat1->rows; r++) {
+
+        // __m256d result2 = _mm256_setzero_pd();
+        // __m256d result3 = _mm256_setzero_pd();
+        // __m256d result4 = _mm256_setzero_pd();
+        for (int i = 0; i < mat1->cols; i++) {
+            __m256d result1 = _mm256_setzero_pd();
+            double *temp1 = mat1->data[r] + i;
+            for (int c = 0; c < mat2->cols/4 * 4; c+=4) {
+                double *temp2 = mat2->data[i] + c;
+                // mat 1
+                __m256d m1rc1 = _mm256_loadu_pd(temp1);
+    			// __m256d m1rc2 = _mm256_loadu_pd(temp1 + 4);
+    			// __m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
+    			// __m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
+                // mat 2
+                __m256d m2rc1 = _mm256_loadu_pd(temp2);
+    			// __m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
+    			// __m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
+    			// __m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
+
+                result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
+                // result1 = _mm256_fmadd_pd(m1rc2, m2rc2, result1);
+                // result1 = _mm256_fmadd_pd(m1rc3, m2rc3, result1);
+                // result1 = _mm256_fmadd_pd(m1rc4, m2rc4, result1);
+
+            }
+            _mm256_storeu_pd(result->data[r] + i, result1);
+            for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+            }
+        }
+    }
 
     // }
     return 0;

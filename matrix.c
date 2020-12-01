@@ -415,7 +415,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
-    // #pragma omp parallel for
+    #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols; c+=4) {
@@ -542,13 +542,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         //     mul_matrix_pow(result, result, mat);
         // }
 
-        int num = 1;
+        int num = 2;
         mul_matrix_pow(result, mat, mat);
         while(num * 2 <= pow){
             num = num * 2;
             mul_matrix_pow(result, result, result);
         }
-        for (int i = num; i <= pow; i++) {
+        for (int i = num; i < pow; i++) {
              mul_matrix_pow(result, result, mat);
         }
 

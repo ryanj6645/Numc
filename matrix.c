@@ -447,10 +447,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     			__m256d m2rc3 = _mm256_loadu_pd(temp2 + 8);
     			__m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
 
-                _mm256_fmadd_pd(m1rc1, m2rc1, result1);
-                _mm256_fmadd_pd(m1rc2, m2rc2, result2);
-                _mm256_fmadd_pd(m1rc3, m2rc3, result3);
-                _mm256_fmadd_pd(m1rc4, m2rc4, result4);
+                result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
+                result2 = _mm256_fmadd_pd(m1rc2, m2rc2, result2);
+                result3 = _mm256_fmadd_pd(m1rc3, m2rc3, result3);
+                result4 = _mm256_fmadd_pd(m1rc4, m2rc4, result4);
 
             }
             _mm256_storeu_pd(result->data[r] + i, result1);
@@ -530,13 +530,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
 
         // mul_matrix(result, mat, mat);
-        // if(num * num <= pow){
-        //     num = num * num;
+        // if(num + num <= pow){
+        //     num = num + num;
         //     mul_matrix_pow2(result, result, pow, num);
         // }
-        // while(num * oldnum <= pow){
-        //     num = num * (int)sqrt(num);
-        //     mul_matrix_pow2(result, mat, pow, num);
+        // while(num + oldnum <= pow){
+        //     num = num + oldnum;
+        //     mul_matrix_pow2(result, mat, pow, pow);
         // }
 
 

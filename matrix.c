@@ -473,7 +473,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
     matrix *temp_m = NULL;
-    int alloc_failed = allocate_matrix(&temp_m, mat1->rows, ma1->cols);
+    int alloc_failed = allocate_matrix(&temp_m, mat1->rows, mat1->cols);
     if (alloc_failed) {
         return -1;
     }

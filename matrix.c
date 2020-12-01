@@ -479,18 +479,19 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     }
 
     matrix *temp_m2 = NULL;
-    int alloc_failed = allocate_matrix(&temp_m, result->rows, result->cols);
+    alloc_failed = allocate_matrix(&temp_m, result->rows, result->cols);
     if (alloc_failed) {
         return -1;
     }
 
 
-    
+
     for (int r = 0; r < mat1->rows; r++) {
         for (int c = 0; c < mat1->cols; c++) {
             temp_m->data[r][c] = mat1->data[r][c];
         }
     }
+    // memcpy(mat1->data2, temp_m->data2, mat1->rows * mat2->cols * sizeof(double) );
 
     for (int r = 0; r < mat2->rows; r++) {
         for (int c = 0; c < mat2->cols; c++) {
@@ -541,10 +542,10 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         // }
 
         int num = 2;
-        mul_matrix(result, mat, mat);
+        mul_matrix_pow(result, mat, mat);
         while(num * 2 <= pow){
             num = num * 2;
-            mul_matrix(result, result, result);
+            mul_matrix_pow(result, result, result);
         }
         for (int i = num; i < pow; i++) {
              mul_matrix_pow(result, result, mat);

@@ -509,7 +509,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
     deallocate_matrix(temp_m);
-    deallocate_matrix(temp_m2)
+    deallocate_matrix(temp_m2);
     return 0;
 }
 

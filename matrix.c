@@ -525,11 +525,11 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         //     mul_matrix_pow(result, result, mat);
         // }
 
-        int num = 2;
+        // int num = 2;
         mul_matrix(result, mat, mat);
-        while(){
+        //while(){
 
-        }
+        //}
 
         // mul_matrix(result, mat, mat);
         // if(num + num <= pow){

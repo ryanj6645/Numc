@@ -529,15 +529,15 @@ int pow_matrix(matrix *result, matrix *mat, int pow, int oldnum) {
         // }
 
 
-        // mul_matrix(result, mat, mat);
-        // if(num * num <= pow){
-        //     num = num * num;
-        //     mul_matrix_pow2(result, result, pow, num);
-        // }
-        // while(num * oldnum <= pow){
-        //     num = num * (int)sqrt(num);
-        //     mul_matrix_pow2(result, mat, pow, num);
-        // }
+        mul_matrix(result, mat, mat);
+        if(num * num <= pow){
+            num = num * num;
+            mul_matrix_pow2(result, result, pow, num);
+        }
+        while(num * oldnum <= pow){
+            num = num * (int)sqrt(num);
+            mul_matrix_pow2(result, mat, pow, num);
+        }
 
 
     }

@@ -415,7 +415,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
-    #pragma omp parallel for
+    // #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols; c+=4) {
@@ -473,13 +473,13 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
     matrix *temp_m = NULL;
-    int alloc_failed = allocate_matrix(&temp_m, result->rows, result->cols);
+    int alloc_failed = allocate_matrix(&temp_m, mat1->rows, ma1->cols);
     if (alloc_failed) {
         return -1;
     }
 
     matrix *temp_m2 = NULL;
-    alloc_failed = allocate_matrix(&temp_m, result->rows, result->cols);
+    alloc_failed = allocate_matrix(&temp_m2, mat2->rows, mat2->cols);
     if (alloc_failed) {
         return -1;
     }
@@ -500,15 +500,16 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
     for (int r = 0; r < temp_m->rows; r++) {
-        for(int c = 0; c < temp_m2->cols; c++){
+        for(int i = 0; i < temp_m->cols; i++) {
             double temp = 0;
-            for(int i = 0; i < temp_m->cols; i++) {
+            for(int c = 0; c < temp_m2->cols; c++){
                 temp = temp_m->data[r][i] * temp_m2->data[i][c] + temp;
                 result->data[r][c] = temp;
             }
         }
     }
     deallocate_matrix(temp_m);
+    deallocate_matrix(temp_m2)
     return 0;
 }
 

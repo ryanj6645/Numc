@@ -519,7 +519,9 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
+    printf("here");
     printf("%d", pow);
+    printf("here");
     if (pow == 0) {
         for (int r = 0; r < mat->rows; r++) {
             for (int c = 0; c < mat->cols; c++) {

@@ -542,13 +542,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         //     mul_matrix_pow(result, result, mat);
         // }
 
-        int num = 1;
+        int num = 2;
         mul_matrix_pow(result, mat, mat);
         while(num * 2 <= pow){
             num = num * 2;
             mul_matrix_pow(result, result, result);
         }
-        for (int i = num; i < pow; i++) {
+        for (int i = num; i =< pow; i++) {
              mul_matrix_pow(result, result, mat);
         }
 

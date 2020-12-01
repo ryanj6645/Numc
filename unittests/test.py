@@ -15,7 +15,9 @@ def mem_test():
     a = f()[0:100]
     b = nc.Matrix(10000, 10000, 2.5)
     c = nc.Matrix(10000, 10000, 2.5)
-    print(a[0])
+    b = a[1:5]
+    a = 5
+    print(b)
 
 mem_test()
 test_medium_add()

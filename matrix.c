@@ -455,9 +455,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 // result1 = _mm256_fmadd_pd(m1rc2, m2rc2, result1);
                 // result1 = _mm256_fmadd_pd(m1rc3, m2rc3, result1);
                 // result1 = _mm256_fmadd_pd(m1rc4, m2rc4, result1);
-
+                _mm256_storeu_pd(result->data[r] + c, result1);
             }
-            _mm256_storeu_pd(result->data[r] + i, result1);
+
             for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }

@@ -410,7 +410,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r+=jump1) {
         for(int c = 0; c < mat2->cols; c+=jump2){
-            double** mat2tp = transpose();
+            double** mat2tp = transpose(mat2->rows, mat2->cols, mat2);
             for(int r2 = r; r2 < jump1 + r; r2++) {
                 for(int i = 0; i < mat1->cols; i++) {
                     for (int c2 = c; c2 < jump2 + c; c2++) {

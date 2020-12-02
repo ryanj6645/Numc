@@ -396,6 +396,7 @@ int main(void) {
     /* add the tests to the suite */
     if ((CU_add_test(pSuite, "add_test", add_test) == NULL) ||
             (CU_add_test(pSuite, "sub_test", sub_test) == NULL) ||
+            (CU_add_test(pSuite, "transpose", transpose_test) == NULL) ||
             (CU_add_test(pSuite, "mul_test", mul_test) == NULL) ||
             (CU_add_test(pSuite, "mul_test2", mul_test2) == NULL) ||
             (CU_add_test(pSuite, "neg_test", neg_test) == NULL) ||

@@ -386,7 +386,7 @@ double **transpose(int rows, int cols, matrix *mat2) {
     double* mat2t = (double *) malloc(rows * cols * sizeof(double));
     double** mat2tp = (double **) malloc(cols * sizeof(double *));
     for (int x = 0; x < cols; x++) {
-        mat2tp[x] = mat2t + x * cols;
+        mat2tp[x] = mat2t + x * rows;
     }
     for(int r = 0; r < rows; r++){
         for(int c = 0; c < cols; c++){

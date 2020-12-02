@@ -414,8 +414,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
-    int jump1 = 1;
-    int jump2 = 1;
+    int jump1 = 100;
+    int jump2 = 100;
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r+=jump1) {
       for(int i = 0; i < mat1->cols; i++) {

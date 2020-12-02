@@ -39,6 +39,7 @@ void transpose_test(void) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 2; j++) {
             set(mat2, i, j, i + j);
+            printf("%d\n", i +j);
         }
     }
     double** temp = transpose(3, 2, mat2);

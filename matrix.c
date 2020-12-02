@@ -414,15 +414,56 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
-    int jump1 = 100;
-    int jump2 = 100;
-    #pragma omp parallel for
+
+
+    // int jump1 = 100;
+    // int jump2 = 100;
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r+=jump1) {
+    //     for(int c = 0; c < mat2->cols; c+=jump2){
+    //         for(int r2 = r; r2 < jump1 + r; r2++) {
+    //             for(int i = 0; i < mat1->cols; i++) {
+    //                 for (int c2 = c; c2 < jump2 + c; c2++) {
+    //                     result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    int jump1 = 20;
+    int jump2 = 20;
+    double* mat2t = (double *) malloc(mat2->rows * jump2 * sizeof(double));
+    double** mat2tPointers = (double **) malloc(mat2->cols * sizeof(double *));
+    for(int x = 0; x < jump2; x++) {
+        mat2tPointers[x] = mat2t + x * mat2->rows;
+    }
+    // #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r+=jump1) {
-            for(int c = 0; c < mat2->cols; c+=jump2){
-                for(int r2 = r; r2 < jump1 + r; r2++) {
-                  for(int i = 0; i < mat1->cols; i++) {
-                    for (int c2 = c; c2 < jump2 + c; c2++) {
-                        result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
+        for(int c = 0; c < mat2->cols; c+=jump2){
+
+            for(int r2 = r; r2 < jump1 + r; r2++) {
+                for (int c2 = c; c2 < jump2 + c; c2++) {
+                    if (r2 >= mat1->rows || c2 >= mat2->cols) {
+                        continue;
+                        // result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
+                    } else {
+                        //mat2t[c2 + r2 * mat2->cols] = mat2[r2 + c2 * mat2->cols];
+                        mat2tPointers[r][c] = mat2[c][r];
+                    }
+                }
+            }
+
+
+            for(int r2 = r; r2 < jump1 + r; r2++) {
+                for (int c2 = c; c2 < jump2 + c; c2++) {
+                    if (r2 >= mat1->rows || c2 >= mat2->cols) {
+                        continue;
+                        // result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
+                    } else {
+                        for(int i = 0; i < mat1->cols; i++) {
+                            // result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
+                            result->data[r2][c2] = mat1->data[r2][i] * mat2t[c2][i] + result->data[r2][c2];
+                        }
                     }
                 }
             }

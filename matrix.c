@@ -513,26 +513,17 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
 
-    double** mat2tp = transpose(mat2->rows, mat2->cols, mat2);
+
+
+
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols; c++) {
-                result->data[r][c] = mat1->data[r][i] * mat2tp[c][i] + result->data[r][c];
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }
         }
     }
-    free(mat2tp[0]);
-    free(mat2tp);
-
-    // #pragma omp parallel for
-    // for (int r = 0; r < mat1->rows; r++) {
-    //     for (int i = 0; i < mat1->cols; i++) {
-    //         for (int c = 0; c < mat2->cols; c++) {
-    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-    //         }
-    //     }
-    // }
     return 0;
 
 }

@@ -540,10 +540,10 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             }
         }
     } else if(pow >= 2){
-        mul_matrix_pow(result, mat, mat);
-        for (int i = 2; i < pow; i++) {
-            mul_matrix_pow(result, result, mat);
-        }
+        // mul_matrix_pow(result, mat, mat);
+        // for (int i = 2; i < pow; i++) {
+        //     mul_matrix_pow(result, result, mat);
+        // }
 
         // int num = 2;
         // mul_matrix_pow(result, mat, mat);
@@ -557,12 +557,12 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
 
         //RECURSIVE
-        // pow_matrix(result, mat, pow/2);
-        // if(pow & 1){
-        //     mul_matrix_pow(result, result, result);
-        //     mul_matrix_pow(result, result, mat);
-        // }
-        // mul_matrix_pow(result, result, result);
+        pow_matrix(result, mat, pow/2);
+        if(pow & 1){
+            mul_matrix_pow(result, result, result);
+            mul_matrix_pow(result, result, mat);
+        }
+        mul_matrix_pow(result, result, result);
 
     }
     return 0;

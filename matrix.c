@@ -448,7 +448,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                         // result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
                     } else {
                         //mat2t[c2 + r2 * mat2->cols] = mat2[r2 + c2 * mat2->cols];
-                        mat2tPointers[r][c] = mat2[c][r];
+                        mat2tPointers[r][c] = mat2->data[c][r];
                     }
                 }
             }
@@ -462,7 +462,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     } else {
                         for(int i = 0; i < mat1->cols; i++) {
                             // result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
-                            result->data[r2][c2] = mat1->data[r2][i] * mat2t[c2][i] + result->data[r2][c2];
+                            result->data[r2][c2] = mat1->data[r2][i] * mat2tPointers[c2][i] + result->data[r2][c2];
                         }
                     }
                 }

@@ -43,15 +43,21 @@ void transpose_test(void) {
     }
     double** temp = transpose(3, 2, mat2);
     CU_ASSERT_EQUAL(temp[0][0], 0);
-    printf("%f\n", temp[0][0]);
+
     CU_ASSERT_EQUAL(temp[0][1], 1);
-    printf("%f\n", temp[0][1]);
+
     CU_ASSERT_EQUAL(temp[0][2], 2);
-    printf("%f\n", temp[1][0]);
+
     CU_ASSERT_EQUAL(temp[1][0], 1);
     CU_ASSERT_EQUAL(temp[1][1], 2);
     CU_ASSERT_EQUAL(temp[1][2], 3);
 
+    printf("%f\n", temp[0][0]);
+    printf("%f\n", temp[0][1]);
+    printf("%f\n", temp[0][2]);
+    printf("%f\n", temp[1][0]);
+    printf("%f\n", temp[1][1]);
+    printf("%f\n", temp[1][2]);
     deallocate_matrix(mat2);
 }
 

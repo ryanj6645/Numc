@@ -513,18 +513,28 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
 
-
-
-
+    double** mat2tp = transpose(mat2->rows, mat2->cols, mat2);
+    #pragma omp parallel for
+    for (int x = 0; x < mat2->cols; x++) {
+        mat2tp[x] = mat2t + x * mat2->rows;
+    }
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
-        #pragma omp parallel for
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols; c++) {
-                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+                result->data[r][c] = mat1->data[r][i] * mat2tp->data[c][i] + result->data[r][c];
             }
         }
     }
+
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for (int i = 0; i < mat1->cols; i++) {
+    //         for (int c = 0; c < mat2->cols; c++) {
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //         }
+    //     }
+    // }
     return 0;
 
 }
@@ -561,7 +571,6 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
   #pragma omp parallel for
   for (int r = 0; r < temp_m->rows; r++) {
-      #pragma omp parallel for
       for(int c = 0; c < temp_m2->cols; c++){
           double temp = 0;
           for(int i = 0; i < temp_m->cols; i++) {

@@ -41,12 +41,13 @@ void transpose_test(void) {
             set(mat2, i, j, i + j);
         }
     }
-    CU_ASSERT_EQUAL(get(mat2, 0, 0), 0);
-    CU_ASSERT_EQUAL(get(mat2, 0, 1), 1);
-    CU_ASSERT_EQUAL(get(mat2, 0, 2), 2);
-    CU_ASSERT_EQUAL(get(mat2, 1, 0), 1);
-    CU_ASSERT_EQUAL(get(mat2, 1, 1), 2);
-    CU_ASSERT_EQUAL(get(mat2, 1, 2), 3);
+    double** temp = transpose(3, 2, mat2);
+    CU_ASSERT_EQUAL(temp[0][0], 0);
+    CU_ASSERT_EQUAL(temp[0][1], 1);
+    CU_ASSERT_EQUAL(temp[0][2], 2);
+    CU_ASSERT_EQUAL(temp[1][0], 1);
+    CU_ASSERT_EQUAL(temp[1][1], 2);
+    CU_ASSERT_EQUAL(temp[1][2], 3);
 
     deallocate_matrix(mat2);
 }

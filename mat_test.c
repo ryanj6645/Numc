@@ -33,6 +33,24 @@ void add_test(void) {
     deallocate_matrix(mat2);
 }
 
+void transpose_test(void) {
+    matrix *mat2 = NULL;
+    CU_ASSERT_EQUAL(allocate_matrix(&mat2, 3, 2), 0);
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 2; j++) {
+            set(mat2, i, j, i + j);
+        }
+    }
+    CU_ASSERT_EQUAL(get(mat2, 0, 0), 0);
+    CU_ASSERT_EQUAL(get(mat2, 0, 1), 1);
+    CU_ASSERT_EQUAL(get(mat2, 0, 2), 2);
+    CU_ASSERT_EQUAL(get(mat2, 1, 0), 1);
+    CU_ASSERT_EQUAL(get(mat2, 1, 1), 2);
+    CU_ASSERT_EQUAL(get(mat2, 1, 2), 3);
+
+    deallocate_matrix(mat2);
+}
+
 void sub_test(void) {
     matrix *result = NULL;
     matrix *mat1 = NULL;

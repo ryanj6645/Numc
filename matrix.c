@@ -405,26 +405,25 @@ double **transpose(int rows, int cols, matrix *mat2) {
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 
-    int jump1 = 20;
-    int jump2 = 20;
-    // #pragma omp parallel for
-    for (int r = 0; r < mat1->rows; r+=jump1) {
-        for(int c = 0; c < mat2->cols; c+=jump2){
-            double** mat2tp = transpose(mat2->rows, mat2->cols, mat2);
-            for(int r2 = r; r2 < jump1 + r; r2++) {
-                for(int i = 0; i < mat1->cols; i++) {
-                    for (int c2 = c; c2 < jump2 + c; c2++) {
-                        if (r2 >= mat1->rows || c2 >= mat2->cols) {
-                            continue;
-                        }else{
-
-                        }
-                        result->data[r2][c2] = mat1->data[r2][i] * mat2tp[c2 - c][i] + result->data[r2][c2];
-                    }
-                }
-            }
-        }
-    }
+    // int jump1 = 20;
+    // int jump2 = 20;
+    // // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r+=jump1) {
+    //     for(int c = 0; c < mat2->cols; c+=jump2){
+    //         double** mat2tp = transpose(mat2->rows, mat2->cols, mat2);
+    //         for(int r2 = r; r2 < jump1 + r; r2++) {
+    //             for(int i = 0; i < mat1->cols; i++) {
+    //                 for (int c2 = c; c2 < jump2 + c; c2++) {
+    //                     if (r2 >= mat1->rows || c2 >= mat2->cols) {
+    //                         continue;
+    //                     }else{
+    //                         result->data[r2][c2] = mat1->data[r2][i] * mat2tp[c2 - c][i] + result->data[r2][c2];
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     // int jump1 = 100;
     // int jump2 = 100;
@@ -486,14 +485,20 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 
 
-    // #pragma omp parallel for
-    // for (int r = 0; r < mat1->rows; r++) {
-    //     for (int i = 0; i < mat1->cols; i++) {
-    //         for (int c = 0; c < mat2->cols; c++) {
-    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-    //         }
-    //     }
-    // }
+    #pragma omp parallel for
+    for (int r = 0; r < mat1->rows; r++) {
+        for (int i = 0; i < mat1->cols; i++) {
+            for (int c = 0; c < mat2->cols/4 * 4; c+=4) {
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+                result->data[r][c + 1] = mat1->data[r][i] * mat2->data[i][c + 1] + result->data[r][c + 1];
+                result->data[r][c + 2] = mat1->data[r][i] * mat2->data[i][c + 2] + result->data[r][c + 2];
+                result->data[r][c + 3] = mat1->data[r][i] * mat2->data[i][c + 3] + result->data[r][c + 3];
+            }
+            for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+            }
+        }
+    }
     return 0;
 
 }
@@ -527,12 +532,26 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
+    // for (int r = 0; r < temp_m->rows; r++) {
+    //     for(int c = 0; c < temp_m2->cols; c++){
+    //         double temp = 0;
+    //         for(int i = 0; i < temp_m->cols; i++) {
+    //             temp = temp_m->data[r][i] * temp_m2->data[i][c] + temp;
+    //             result->data[r][c] = temp;
+    //         }
+    //     }
+    // }
+    #pragma omp parallel for
     for (int r = 0; r < temp_m->rows; r++) {
-        for(int c = 0; c < temp_m2->cols; c++){
-            double temp = 0;
-            for(int i = 0; i < temp_m->cols; i++) {
-                temp = temp_m->data[r][i] * temp_m2->data[i][c] + temp;
-                result->data[r][c] = temp;
+        for (int i = 0; i < temp_m->cols; i++) {
+            for (int c = 0; c < temp_m2->cols/4 * 4; c+=4) {
+                result->data[r][c] = temp_m->data[r][i] * temp_m2->data[i][c] + result->data[r][c];
+                result->data[r][c + 1] = temp_m->data[r][i] * temp_m2->data[i][c + 1] + result->data[r][c + 1];
+                result->data[r][c + 2] = temp_m->data[r][i] * temp_m2->data[i][c + 2] + result->data[r][c + 2];
+                result->data[r][c + 3] = temp_m->data[r][i] * temp_m2->data[i][c + 3] + result->data[r][c + 3];
+            }
+            for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
+                result->data[r][c] = temp_m->data[r][i] * temp_m2->data[i][c] + result->data[r][c];
             }
         }
     }

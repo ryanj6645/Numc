@@ -221,7 +221,7 @@ void pow_test(void) {
     printf("here\n");
     printf("%f", get(result, 0, 1));
     printf("here\n");
-    printf("%for", get(result, 1, 0));
+    printf("%f", get(result, 1, 0));
     printf("here\n");
     printf("%f", get(result, 1, 1));
     CU_ASSERT_EQUAL(get(result, 0, 0), 3);

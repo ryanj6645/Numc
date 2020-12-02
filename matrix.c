@@ -433,7 +433,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int jump1 = 20;
     int jump2 = 20;
     double* mat2t = (double *) malloc(mat2->rows * jump2 * sizeof(double));
-    double** mat2tPointers = (double **) malloc(mat2->cols * sizeof(double *));
+    double** mat2tPointers = (double **) malloc(jump2 * sizeof(double *));
     for(int x = 0; x < jump2; x++) {
         mat2tPointers[x] = mat2t + x * mat2->rows;
     }

@@ -557,7 +557,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
     // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
-    #pragma omp parallel for
+    // #pragma omp parallel for
     for (int r = 0; r < temp_m->rows; r++) {
         for(int i = 0; i < temp_m->cols; i++) {
             double temp = 0;

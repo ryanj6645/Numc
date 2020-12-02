@@ -516,8 +516,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 
 
-    #pragma omp parallel for collapse(3)
+    #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
+        #pragma omp parallel for
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols; c++) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
@@ -544,14 +545,14 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   }
 
 
-
+  #pragma omp parallel for
   for (int r = 0; r < mat1->rows; r++) {
       for (int c = 0; c < mat1->cols; c++) {
           temp_m->data[r][c] = mat1->data[r][c];
       }
   }
   // memcpy(mat1->data2, temp_m->data2, mat1->rows * mat2->cols * sizeof(double) );
-
+  #pragma omp parallel for
   for (int r = 0; r < mat2->rows; r++) {
       for (int c = 0; c < mat2->cols; c++) {
           temp_m2->data[r][c] = mat2->data[r][c];

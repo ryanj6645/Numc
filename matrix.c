@@ -414,7 +414,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for(int r2 = r; r2 < jump1 + r; r2++) {
                 for(int i = 0; i < mat1->cols; i++) {
                     for (int c2 = c; c2 < jump2 + c; c2++) {
-                        result->data[r2][c2] = mat1->data[r2][i] * mat2tp[i][c2] + result->data[r2][c2];
+                        result->data[r2][c2] = mat1->data[r2][i] * mat2tp[c2][i] + result->data[r2][c2];
                     }
                 }
             }

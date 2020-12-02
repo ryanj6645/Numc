@@ -400,13 +400,28 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // if (mat1->rows < 15 && mat2->cols < 15) {
     // check
     // 1200 x 1600 1600 x 1000 1000 x 1600
+    // int jump1 = 1;
+    // int jump2 = 1;
+    // // #pragma omp parallel for collapse(5)
+    // for (int r = 0; r < mat1->rows; r+=jump1) {
+    //     for(int c = 0; c < mat2->cols; c+=jump2){
+    //         for(int r2 = 0; r2 < jump1; r2++) {
+    //             for (int c2 = 0; c2 < jump2; c2++) {
+    //                 for(int i = 0; i < mat1->cols; i++) {
+    //                     result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     int jump1 = 1;
     int jump2 = 1;
+    #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r+=jump1) {
         for(int c = 0; c < mat2->cols; c+=jump2){
             for(int r2 = 0; r2 < jump1; r2++) {
-                for (int c2 = 0; c2 < jump2; c2++) {
-                    for(int i = 0; i < mat1->cols; i++) {
+                for(int i = 0; i < mat1->cols; i++) {
+                    for (int c2 = 0; c2 < jump2; c2++) {
                         result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
                     }
                 }

@@ -529,6 +529,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 }
 
 int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
+
+  // #pragma omp parallel for
   matrix *temp_m = NULL;
   int alloc_failed = allocate_matrix(&temp_m, mat1->rows, mat1->cols);
   if (alloc_failed) {
@@ -556,11 +558,10 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
       }
   }
   // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
-  // #pragma omp parallel for
   for (int r = 0; r < temp_m->rows; r++) {
-      for(int i = 0; i < temp_m->cols; i++) {
-          double temp;
-          for(int c = 0; c < temp_m2->cols; c++){
+      for(int c = 0; c < temp_m2->cols; c++){
+          double temp = 0;
+          for(int i = 0; i < temp_m->cols; i++) {
               temp = temp_m->data[r][i] * temp_m2->data[i][c] + temp;
               result->data[r][c] = temp;
           }

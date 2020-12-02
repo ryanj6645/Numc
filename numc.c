@@ -431,7 +431,7 @@ PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
         PyErr_SetString(PyExc_RuntimeError, "Allocation failed!");
         return NULL;
     }
-    if(PyLong_AsLong(pow) != 2){
+    if(PyLong_AsLong(pow) != 3){
       PyErr_SetString(PyExc_RuntimeError, "wrong pow");
       return NULL;
     }

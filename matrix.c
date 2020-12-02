@@ -398,23 +398,39 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // }
     // CAN ADD THIS CASE TO SPEED UP SMALL CASES
     // if (mat1->rows < 15 && mat2->cols < 15) {
-    //     for (int r = 0; r < mat1->rows; r++) {
-    //         for(int c = 0; c < mat2->cols; c++){
-    //             // double temp = 0;
-    //             for(int i = 0; i < mat1->cols; i++) {
-    //                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-    //             }
-    //         }
-    //     }
-    // } else {
-    #pragma omp parallel for
-    for (int r = 0; r < mat1->rows; r++) {
-        for (int i = 0; i < mat1->cols; i++) {
-            for (int c = 0; c < mat2->cols; c++) {
-                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    // check
+    // 1200 x 1600 1600 x 1000 1000 x 1600
+    int jump1 = 1;
+    int jump2 = 1;
+    for (int r = 0; r < mat1->rows; r+=jump1) {
+        for(int c = 0; c < mat2->cols; c+=jump2){
+            for(int r2 = 0; r2 < jump1; r2++) {
+                for (int c2 = 0; c2 < jump2; c2++) {
+                    for(int i = 0; i < mat1->cols; i++) {
+                        result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+                    }
+                }
             }
         }
     }
+    // } else {
+    // 1200 x 1200
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for (int i = 0; i < mat1->cols; i++) {
+    //         for (int c = 0; c < mat2->cols; c++) {
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //         }
+    //     }
+    // }
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for (int i = 0; i < mat1->cols; i++) {
+    //         for (int c = 0; c < mat2->cols; c++) {
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //         }
+    //     }
+    // }
     // #pragma omp parallel for
     // for (int r = 0; r < mat1->rows; r++) {
     //     for (int i = 0; i < mat1->cols; i++) {
@@ -490,6 +506,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
             temp_m->data[r][c] = mat1->data[r][c];
         }
     }
+    // MEMCPY
     // memcpy(mat1->data2, temp_m->data2, mat1->rows * mat2->cols * sizeof(double) );
 
     for (int r = 0; r < mat2->rows; r++) {

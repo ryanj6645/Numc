@@ -561,8 +561,9 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         if(pow & 1){
             mul_matrix_pow(result, result, result);
             mul_matrix_pow(result, result, mat);
+        }else{
+            mul_matrix_pow(result, result, result);
         }
-        mul_matrix_pow(result, result, result);
 
     }
     return 0;

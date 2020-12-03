@@ -614,10 +614,10 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   }
 
   #pragma omp parallel for
-  for (int r = 0; r < mat1t->rows; r++) {
-      for(int i = 0; i < mat1t->cols; i++) {
-          for(int c = 0; c < mat2t->cols; c++){
-            result->data[r][c] = mat1t->data[r][i] * mat2t->data[i][c] + result->data[r][c];
+  for (int r = 0; r < mat1->rows; r++) {
+      for(int i = 0; i < mat1->cols; i++) {
+          for(int c = 0; c < mat2->cols; c++){
+            result->data[r][c] = mat1t[r][i] * mat2t[i][c] + result->data[r][c];
           }
       }
   }

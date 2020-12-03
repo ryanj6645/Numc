@@ -531,7 +531,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         //     }
         // }
 
-    double* dst = (double) malloc(mat2->rows * mat2->cols * sizeof(double*));
+    double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
     int n = mat2->cols;
     int jump1 = 20;
     for(int r = 0; r < mat2->rows; r+= jump1) {

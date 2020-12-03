@@ -552,7 +552,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     for (int r = 0; r < mat1->rows; r++) {
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols; c++) {
-                result->data[r][c] = mat1->data[r][i] * dst[c + i * mat2->cols] + result->data[r][c];
+                result->data[r][c] = mat1->data[r][i] * dst[i + c * mat2->cols] + result->data[r][c];
             }
         }
     }
@@ -584,20 +584,16 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   // }
 
 
-
-  // #pragma omp parallel for
-  // for (int r = 0; r < mat1->rows * mat1->cols; r++) {
-  //       mat1data[r] = mat1->data[r / mat1->cols][r % mat1->rows];
-  // }
-  //
-  // #pragma omp parallel for
-  // for (int r = 0; r < mat2->rows * mat2->cols; r++) {
-  //       mat2data[r] = mat2->data[r / mat2->cols][r % mat2->rows];
-  // }
   double * mat1data = (double *) calloc(mat1->rows * mat1->cols, sizeof(double));
+  #pragma omp parallel for
+  for (int r = 0; r < mat1->rows * mat1->cols; r++) {
+        mat1data[r] = mat1->data[r / mat1->cols][r % mat1->rows];
+  }
   double * mat2data = (double *) calloc(mat2->rows * mat2->cols, sizeof(double));
-  memcpy(&mat1data, mat1->data[0], mat1->rows * mat1->cols);
-  memcpy(&mat2data, mat2->data[0], mat2->rows * mat2->cols);
+  #pragma omp parallel for
+  for (int r = 0; r < mat2->rows * mat2->cols; r++) {
+        mat2data[r] = mat2->data[r / mat2->cols][r % mat2->rows];
+  }
 
   #pragma omp parallel for
   for (int r = 0; r < result->rows * result->cols; r++) {

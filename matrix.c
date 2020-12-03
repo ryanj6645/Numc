@@ -581,13 +581,13 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   double ** mat1t = (double **) malloc(mat1->rows * sizeof(double *));
   double * mat1data = (double *) calloc(mat1->rows * mat1->cols, sizeof(double));
   for (int i = 0; i < mat1->rows; i++) {
-      mat1data[i] = mat1data + i * mat1->cols;
+      mat1t[i] = mat1data + i * mat1->cols;
   }
 
   double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
   double * mat2data = (double *) calloc(mat2->rows * mat2->cols, sizeof(double));
   for (int i = 0; i < mat2->rows; i++) {
-      mat2data[i] = mat2data + i * mat2->cols;
+      mat2t[i] = mat2data + i * mat2->cols;
   }
 
 

@@ -609,9 +609,9 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
       }
   }
   free(mat1data);
-  free(mat1t);
+  //free(mat1t);
   free(mat2data);
-  free(mat2t);
+  //free(mat2t);
   return 0;
 }
 

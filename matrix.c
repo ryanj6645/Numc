@@ -562,7 +562,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // if (mat1->cols * mat1->rows > 100000) {
         double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
         int n = mat2->cols;
-        int jump1 = 100;
+        int jump1 = 20;
         // #pragma omp parallel for
         for(int r = 0; r < mat2->rows; r+= jump1) {
             for(int c = 0; c < n; c+= jump1) {
@@ -587,7 +587,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 double *temp3 = result->data[r] + c;
                 __m256d result1 = _mm256_loadu_pd(temp3);
                 int flag = 0;
-                for (int i = 0; i < mat1->cols/24 * 24; i+=24) {
+                for (int i = 0; i < mat1->cols/48 * 48; i+=48) {
                     flag = 1;
                     double *temp1 = mat1->data[r] + i;
                     double *temp2 = dst + i + c * mat2->rows;
@@ -597,6 +597,12 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     __m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
                     __m256d m1rc5 = _mm256_loadu_pd(temp1 + 16);
                     __m256d m1rc6 = _mm256_loadu_pd(temp1 + 20);
+                    __m256d m1rc7 = _mm256_loadu_pd(temp1 + 24);
+                    __m256d m1rc8 = _mm256_loadu_pd(temp1 + 28);
+                    __m256d m1rc9 = _mm256_loadu_pd(temp1 + 32);
+                    __m256d m1rc10 = _mm256_loadu_pd(temp1 + 36);
+                    __m256d m1rc11 = _mm256_loadu_pd(temp1 + 40);
+                    __m256d m1rc12 = _mm256_loadu_pd(temp1 + 44);
 
                     __m256d m2rc1 = _mm256_loadu_pd(temp2);
                     __m256d m2rc2 = _mm256_loadu_pd(temp2 + 4);
@@ -604,6 +610,12 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     __m256d m2rc4 = _mm256_loadu_pd(temp2 + 12);
                     __m256d m2rc5 = _mm256_loadu_pd(temp2 + 16);
                     __m256d m2rc6 = _mm256_loadu_pd(temp2 + 20);
+                    __m256d m2rc7 = _mm256_loadu_pd(temp2 + 24);
+                    __m256d m2rc8 = _mm256_loadu_pd(temp2 + 28);
+                    __m256d m2rc9 = _mm256_loadu_pd(temp2 + 32);
+                    __m256d m2rc10 = _mm256_loadu_pd(temp2 + 36);
+                    __m256d m2rc11 = _mm256_loadu_pd(temp2 + 40);
+                    __m256d m2rc12 = _mm256_loadu_pd(temp2 + 44);
 
                     result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
                     result1 = _mm256_fmadd_pd(m1rc2, m2rc2, result1);
@@ -611,6 +623,12 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     result1 = _mm256_fmadd_pd(m1rc4, m2rc4, result1);
                     result1 = _mm256_fmadd_pd(m1rc5, m2rc5, result1);
                     result1 = _mm256_fmadd_pd(m1rc6, m2rc6, result1);
+                    result1 = _mm256_fmadd_pd(m1rc7, m2rc7, result1);
+                    result1 = _mm256_fmadd_pd(m1rc8, m2rc8, result1);
+                    result1 = _mm256_fmadd_pd(m1rc9, m2rc9, result1);
+                    result1 = _mm256_fmadd_pd(m1rc10, m2rc10, result1);
+                    result1 = _mm256_fmadd_pd(m1rc11, m2rc11, result1);
+                    result1 = _mm256_fmadd_pd(m1rc12, m2rc12, result1);
 
                     // result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
                 }
@@ -622,7 +640,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     flag = 0;
                 }
 
-                for (int i = mat1->cols/24 * 24; i < mat1->cols; i++) {
+                for (int i = mat1->cols/48 * 48; i < mat1->cols; i++) {
                     result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
 
                 }

@@ -426,36 +426,36 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
 
-    int jump1 = 20;
-    int jump2 = 20;
-    double* mat2t = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
-    double** mat2tp = (double **) malloc(mat2->cols * sizeof(double *));
-    #pragma omp parallel for
-    for (int x = 0; x < mat2->cols; x++) {
-        mat2tp[x] = mat2t + x * mat2->rows;
-    }
+    // int jump1 = 20;
+    // int jump2 = 20;
+    // double* mat2t = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
+    // double** mat2tp = (double **) malloc(mat2->cols * sizeof(double *));
     // #pragma omp parallel for
-    for (int r = 0; r < mat1->rows; r+=jump1) {
-        for(int c = 0; c < mat2->cols; c+=jump2){
-            // double** mat2tp = transpose(mat2->rows, mat2->cols, mat2);
-            for(int x = 0; x < mat2->rows; x++){
-                for(int y = 0; y < mat2->cols; y++){
-                    mat2tp[y][x] = mat2->data[x][y];
-                }
-            }
-            for(int r2 = r; r2 < jump1 + r; r2++) {
-                for(int i = 0; i < mat1->cols; i++) {
-                    for (int c2 = c; c2 < jump2 + c; c2++) {
-                        if (r2 >= mat1->rows || c2 >= mat2->cols) {
-                            continue;
-                        }else{
-                            result->data[r2][c2] = mat1->data[r2][i] * mat2tp[c2 - c][i] + result->data[r2][c2];
-                        }
-                    }
-                }
-            }
-        }
-    }
+    // for (int x = 0; x < mat2->cols; x++) {
+    //     mat2tp[x] = mat2t + x * mat2->rows;
+    // }
+    // // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r+=jump1) {
+    //     for(int c = 0; c < mat2->cols; c+=jump2){
+    //         // double** mat2tp = transpose(mat2->rows, mat2->cols, mat2);
+    //         for(int x = 0; x < mat2->rows; x++){
+    //             for(int y = 0; y < mat2->cols; y++){
+    //                 mat2tp[y][x] = mat2->data[x][y];
+    //             }
+    //         }
+    //         for(int r2 = r; r2 < jump1 + r; r2++) {
+    //             for(int i = 0; i < mat1->cols; i++) {
+    //                 for (int c2 = c; c2 < jump2 + c; c2++) {
+    //                     if (r2 >= mat1->rows || c2 >= mat2->cols) {
+    //                         continue;
+    //                     }else{
+    //                         result->data[r2][c2] = mat1->data[r2][i] * mat2tp[c2 - c][i] + result->data[r2][c2];
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     // int jump1 = 100;
     // int jump2 = 100;
@@ -531,15 +531,31 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         //     }
         // }
 
-        // #pragma omp parallel for
-        // for (int r = 0; r < mat1->rows; r++) {
-        //     for (int i = 0; i < mat1->cols; i++) {
-        //         for (int c = 0; c < mat2->cols; c++) {
-        //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-        //         }
-        //     }
-        // }
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for (int i = 0; i < mat1->cols; i++) {
+    //         for (int c = 0; c < mat2->cols; c++) {
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //         }
+    //     }
+    // }
+    // __m256d _mm256_fmadd_pd (__m256d a, __m256d b, __m256d c)
 
+    #pragma omp parallel for
+    for (int r = 0; r < mat1->rows; r+=4) {
+        for (int i = 0; i < mat1->cols; i++) {
+            __m256d result1 = _mm256_setzero_pd();
+            for (int c = 0; c < mat2->cols; c++) {
+                double *temp1 = mat1->data[r] + c;
+                double *temp2 = mat2->data[r] + c;
+                __m256d m1rc1 = _mm256_loadu_pd(temp1);
+                __m256d m2rc1 = _mm256_loadu_pd(temp2);
+                // result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+                _mm256_fmadd_pd(m1rc1, m2rc1, result1);
+            }
+            _mm256_storeu_pd(result->data[r] + c, result1);
+        }
+    }
     return 0;
 
 }
@@ -579,6 +595,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
       for(int c = 0; c < temp_m2->cols; c++){
           double temp = 0;
           for(int i = 0; i < temp_m->cols; i++) {
+              double* temp
               temp = temp_m->data[r][i] * temp_m2->data[i][c] + temp;
               result->data[r][c] = temp;
           }

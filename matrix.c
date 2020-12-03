@@ -88,6 +88,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         free(mat);
         return -1;
     }
+    #pragma omp parallel for
     for (int i = 0; i < (*mat)->rows; i++) {
         (*mat)->data[i] = (*mat)->data2 + i * cols;
     }
@@ -456,23 +457,23 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
 
-    int jump1 = 100;
-    int jump2 = 100;
-    #pragma omp parallel for
-    for (int r = 0; r < mat1->rows; r+=jump1) {
-        for(int c = 0; c < mat2->cols; c+=jump2){
-            #pragma omp parallel for
-            for(int r2 = r; r2 < jump1 + r; r2++) {
-                for(int i = 0; i < mat1->cols; i++) {
-                    for (int c2 = c; c2 < jump2 + c; c2++) {
-                      if(r2 < mat1->rows && c2 < mat2->cols){
-                        result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
-                      }
-                    }
-                }
-            }
-        }
-    }
+    // int jump1 = 100;
+    // int jump2 = 100;
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r+=jump1) {
+    //     for(int c = 0; c < mat2->cols; c+=jump2){
+    //         #pragma omp parallel for
+    //         for(int r2 = r; r2 < jump1 + r; r2++) {
+    //             for(int i = 0; i < mat1->cols; i++) {
+    //                 for (int c2 = c; c2 < jump2 + c; c2++) {
+    //                   if(r2 < mat1->rows && c2 < mat2->cols){
+    //                     result->data[r2][c2] = mat1->data[r2][i] * mat2->data[i][c2] + result->data[r2][c2];
+    //                   }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
 
 
@@ -530,14 +531,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         //     }
         // }
 
-        // #pragma omp parallel for
-        // for (int r = 0; r < mat1->rows; r++) {
-        //     for (int i = 0; i < mat1->cols; i++) {
-        //         for (int c = 0; c < mat2->cols; c++) {
-        //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-        //         }
-        //     }
-        // }
+        #pragma omp parallel for
+        for (int r = 0; r < mat1->rows; r++) {
+            for (int i = 0; i < mat1->cols; i++) {
+                for (int c = 0; c < mat2->cols; c++) {
+                    result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+                }
+            }
+        }
 
     return 0;
 

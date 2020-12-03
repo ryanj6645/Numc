@@ -578,7 +578,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   for (int r = 0; r < temp_m->rows; r++) {
       for(int c = 0; c < temp_m2->cols; c++){
             for(int i = 0; i < temp_m->cols; i++) {
-              result->data[r][c] = temp_m->data[r][i] * temp_m2->data[i][c] + result->data[r][c];
+              result->data[r][c] = temp_m->data[r][i] * temp_m2->data[i][c];
 
           }
       }

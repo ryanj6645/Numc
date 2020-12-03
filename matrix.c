@@ -816,11 +816,9 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
         //RECURSIVE
         pow_matrix(result, mat, pow/2);
-        if(pow & 1){
-            mul_matrix_pow(result, result, result);
+        mul_matrix_pow(result, result, result);
+        if(pow & 1){  
             mul_matrix_pow(result, result, mat);
-        }else{
-            mul_matrix_pow(result, result, result);
         }
 
     }

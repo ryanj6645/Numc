@@ -551,7 +551,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 __m256d m1rc1 = _mm256_loadu_pd(temp1);
                 __m256d m2rc1 = _mm256_loadu_pd(temp2);
                 // result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-                _mm256_fmadd_pd(m1rc1, m2rc1, result1);
+                result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
             }
             _mm256_storeu_pd(result->data[r] + c, result1);
         }

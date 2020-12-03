@@ -527,7 +527,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         //     }
         // }
 
-        #pragma omp parallel {
+        #pragma omp parallel (
         for (int r = 0; r < mat1->rows; r++) {
           if((r/((mat1->rows)/omp_get_num_threads())) == omp_get_thread_num()){
             for (int i = 0; i < mat1->cols; i++) {
@@ -537,7 +537,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             }
           }
         }
-      }
+      )
     // }
 
     return 0;

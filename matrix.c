@@ -691,12 +691,12 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     }
 
 
-    double * mat1data = (double *) calloc(mat1->rows * mat1->cols, sizeof(double));
+
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows * mat1->cols; r++) {
           mat1data[r] = mat1->data[r / mat1->cols][r % mat1->rows];
     }
-    double * mat2data = (double *) calloc(mat2->rows * mat2->cols, sizeof(double));
+    
     #pragma omp parallel for
     for (int r = 0; r < mat2->rows * mat2->cols; r++) {
           mat2data[r] = mat2->data[r / mat2->cols][r % mat2->rows];

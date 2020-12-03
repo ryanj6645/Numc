@@ -640,7 +640,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     flag = 0;
                 }
 
-                for (int i = mat1->cols/48 * 48; i < mat1->cols; i++) {
+                for (int i = mat1->cols/32 * 32; i < mat1->cols; i++) {
                     result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
 
                 }

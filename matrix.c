@@ -614,11 +614,11 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             }
             // double p[4];
             _mm256_storeu_pd(result->data[r] + c, result1);
-            _mm256_storeu_pd(result->data[r] + c + 4, result1);
-            _mm256_storeu_pd(result->data[r] + c + 8, result1);
-            _mm256_storeu_pd(result->data[r] + c + 12, result1);
-            _mm256_storeu_pd(result->data[r] + c + 16, result1);
-            _mm256_storeu_pd(result->data[r] + c + 20, result1);
+            _mm256_storeu_pd(result->data[r] + c + 4, result2);
+            _mm256_storeu_pd(result->data[r] + c + 8, result3);
+            _mm256_storeu_pd(result->data[r] + c + 12, result4);
+            _mm256_storeu_pd(result->data[r] + c + 16, result5);
+            _mm256_storeu_pd(result->data[r] + c + 20, result6);
 
             // result->data[r][c] = p[0] + p[1] + p[2] + p[3];
         }

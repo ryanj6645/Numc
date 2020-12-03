@@ -621,10 +621,10 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
           }
       }
   }
-  free(mat1t);
   free(mat1data);
-  free(mat2t);
-  free(mat1data);
+
+  free(mat2data);
+  
   return 0;
 }
 

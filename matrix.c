@@ -403,7 +403,7 @@ double **transpose(int rows, int cols, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  * Remember that matrix multiplication is not the same as multiplying individual elements.
  */
-int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
+int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 
     // int jump1 = 20;
@@ -544,7 +544,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     return 0;
 }
 
-int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
+int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
 
   // #pragma omp parallel for
   matrix *temp_m = NULL;

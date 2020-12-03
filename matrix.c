@@ -550,7 +550,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
-        for (int c = 0; c < mat2->cols; c++) {
+        for (int c = 0; c < mat2->rows; c++) {
             for (int i = 0; i < mat1->cols; i++) {
                 result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
             }

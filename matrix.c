@@ -522,14 +522,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     // #pragma omp parallel num_threads(4)
     // {
-        // #pragma omp parallel for
-        // for (int r = 0; r < mat1->rows; r++) {
-        //     for (int i = 0; i < mat1->cols; i++) {
-        //         for (int c = 0; c < mat2->cols; c++) {
-        //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
-        //         }
-        //     }
-        // }
+    #pragma omp parallel for
+    for (int r = 0; r < mat1->rows; r++) {
+        for (int i = 0; i < mat1->cols; i++) {
+            for (int c = 0; c < mat2->cols; c++) {
+                result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+            }
+        }
+    }
 
     // double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
     // int n = mat2->cols;
@@ -549,14 +549,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
     //
-    #pragma omp parallel for
-    for (int r = 0; r < mat1->rows; r++) {
-        for (int i = 0; i < mat1->cols; i++) {
-            for (int c = 0; c < mat2->cols; c++) {
-                result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
-            }
-        }
-    }
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for (int i = 0; i < mat1->cols; i++) {
+    //         for (int c = 0; c < mat2->cols; c++) {
+    //             result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
+    //         }
+    //     }
+    // }
 
     // double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
     // int n = mat2->cols;

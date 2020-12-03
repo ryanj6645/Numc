@@ -581,11 +581,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         for (int c = 0; c < mat2->cols/24 * 24; c+=24) {
             double *temp3 = result->data[r] + c;
             __m256d result1 = _mm256_loadu_pd(temp3);
-            __m256d result2 = _mm256_loadu_pd(temp3 + 4);
-            __m256d result3 = _mm256_loadu_pd(temp3 + 8);
-            __m256d result4 = _mm256_loadu_pd(temp3 + 12);
-            __m256d result5 = _mm256_loadu_pd(temp3 + 16);
-            __m256d result6 = _mm256_loadu_pd(temp3 + 20);
             for (int i = 0; i < mat1->cols/24 * 24; i+=24) {
                 double *temp1 = mat1->data[r] + i;
                 double *temp2 = dst + c + i * mat2->rows;
@@ -604,11 +599,11 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 __m256d m2rc6 = _mm256_loadu_pd(temp2 + 20);
 
                 result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
-                result2 = _mm256_fmadd_pd(m1rc2, m2rc2, result2);
-                result3 = _mm256_fmadd_pd(m1rc3, m2rc3, result3);
-                result4 = _mm256_fmadd_pd(m1rc4, m2rc4, result4);
-                result5 = _mm256_fmadd_pd(m1rc5, m2rc5, result5);
-                result6 = _mm256_fmadd_pd(m1rc6, m2rc6, result6);
+                result1 = _mm256_fmadd_pd(m1rc2, m2rc2, result1);
+                result1 = _mm256_fmadd_pd(m1rc3, m2rc3, result1);
+                result1 = _mm256_fmadd_pd(m1rc4, m2rc4, result1);
+                result1 = _mm256_fmadd_pd(m1rc5, m2rc5, result1);
+                result1 = _mm256_fmadd_pd(m1rc6, m2rc6, result1);
 
                 // result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
             }

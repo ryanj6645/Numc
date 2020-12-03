@@ -591,7 +591,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
                 result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
 
-                _mm256_storeu_pd(result->data[r] + c, result1)
+                _mm256_storeu_pd(result->data[r] + c, result1);
                 // result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
             }
         }

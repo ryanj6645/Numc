@@ -593,9 +593,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
                 // result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
             }
-            double p[4];
-            _mm256_storeu_pd(p, result1);
-            result->data[r][c] = p[0] + p[1] + p[2] + p[3];
+            // double p[4];
+            _mm256_storeu_pd(result->data[r] + c, result1);
+            // result->data[r][c] = p[0] + p[1] + p[2] + p[3];
             for (int i = mat1->cols/4 * 4; i < mat1->cols; i++) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }

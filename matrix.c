@@ -621,8 +621,10 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
           }
       }
   }
-  deallocate_matrix(mat1t);
-  deallocate_matrix(mat2t);
+  free(mat1t);
+  free(mat1data);
+  free(mat2t);
+  free(mat1data);
   return 0;
 }
 

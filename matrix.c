@@ -531,21 +531,22 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         //     }
         // }
 
-    // mat2->
-    // int jump1 = 20;
-    // for(int r = 0; r < n; r+= jump1) {
-    //     for(int c = 0; c < n; c+= jump1) {
-    //         for(int r2 = r; r2 < jump1 + r; r2++) {
-    //             for(int c2 = c; c2 < jump1 + c; c2++) {
-    //                 if (r2 >= n || c2 >= n) {
-    //                     continue;
-    //                 } else {
-    //                     dst[c2 + r2 * n] = src[r2 + c2 * n];
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    double* dst = (double) malloc(mat2->rows * mat2->cols * sizeof(double*));
+    int n = mat2->cols;
+    int jump1 = 20;
+    for(int r = 0; r < mat2->rows; r+= jump1) {
+        for(int c = 0; c < n; c+= jump1) {
+            for(int r2 = r; r2 < jump1 + r; r2++) {
+                for(int c2 = c; c2 < jump1 + c; c2++) {
+                    if (r2 >= mat2->rows || c2 >= n) {
+                        continue;
+                    } else {
+                        dst[c2 + r2 * mat2->rows] = mat2->data2[r2 + c2 * n];
+                    }
+                }
+            }
+        }
+    }
 
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
@@ -555,6 +556,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             }
         }
     }
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat1->rows; r++) {
+    //     for (int i = 0; i < mat1->cols; i++) {
+    //         for (int c = 0; c < mat2->cols; c++) {
+    //             result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
+    //         }
+    //     }
+    // }
     // __m256d _mm256_fmadd_pd (__m256d a, __m256d b, __m256d c)
 
     return 0;
@@ -568,6 +577,14 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   if (alloc_failed) {
       return -1;
   }
+
+  double ** mat1t = (double **) malloc(mat1->rows * sizeof(double *));
+  double * mat1data = (double *) calloc(mat1->rows * mat1->cols, sizeof(double));
+  for (int i = 0; i < mat1->rows; i++) {
+      mat1data[i] = (*mat)->data2 + i * mat1->cols;
+  }
+
+
 
   matrix *temp_m2 = NULL;
   alloc_failed = allocate_matrix(&temp_m2, mat2->rows, mat2->cols);

@@ -581,11 +581,11 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         for (int c = 0; c < mat2->cols/24 * 24; c+=24) {
             double *temp3 = result->data[r] + c;
             __m256d result1 = _mm256_loadu_pd(temp3);
-            __m256d result1 = _mm256_loadu_pd(temp3 + 4);
-            __m256d result1 = _mm256_loadu_pd(temp3 + 8);
-            __m256d result1 = _mm256_loadu_pd(temp3 + 12);
-            __m256d result1 = _mm256_loadu_pd(temp3 + 16);
-            __m256d result1 = _mm256_loadu_pd(temp3 + 20);
+            __m256d result2 = _mm256_loadu_pd(temp3 + 4);
+            __m256d result3 = _mm256_loadu_pd(temp3 + 8);
+            __m256d result4 = _mm256_loadu_pd(temp3 + 12);
+            __m256d result5 = _mm256_loadu_pd(temp3 + 16);
+            __m256d result6 = _mm256_loadu_pd(temp3 + 20);
             for (int i = 0; i < mat1->cols/24 * 24; i+=24) {
                 double *temp1 = mat1->data[r] + i;
                 double *temp2 = dst + c + i * mat2->rows;

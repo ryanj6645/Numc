@@ -574,6 +574,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                             dst[r2 + c2 * mat2->rows] = mat2->data2[c2 + r2 * n];
                         }
                     }
+                    if (r2 >= mat2->rows) {
+                        break;
+                    }
                 }
             }
         }

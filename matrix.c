@@ -578,7 +578,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
-        for (int c = 0; c < mat2->cols/24 * 24; c+=24) {
+        for (int c = 0; c < mat2->cols; c++) {
             double *temp3 = result->data[r] + c;
             __m256d result1 = _mm256_loadu_pd(temp3);
             for (int i = 0; i < mat1->cols/24 * 24; i+=24) {
@@ -611,13 +611,15 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(p, result1);
 
             result->data[r][c] = p[0] + p[1] + p[2] + p[3];
-        }
-        for (int c = mat2->cols/24 * 24; c < mat2->cols; c++) {
+            
             for (int i = mat1->cols/24 * 24; i < mat1->cols; i++) {
                 result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
 
             }
         }
+        // for (int c = mat2->cols/24 * 24; c < mat2->cols; c++) {
+        //
+        // }
     }
 
 

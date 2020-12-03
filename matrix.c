@@ -560,35 +560,30 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
   }
 
 
-  // #pragma omp parallel for
+  #pragma omp parallel for
   for (int r = 0; r < mat1->rows; r++) {
       for (int c = 0; c < mat1->cols; c++) {
           temp_m->data[r][c] = mat1->data[r][c];
       }
   }
   // memcpy(mat1->data2, temp_m->data2, mat1->rows * mat2->cols * sizeof(double) );
-  // #pragma omp parallel for
+  #pragma omp parallel for
   for (int r = 0; r < mat2->rows; r++) {
       for (int c = 0; c < mat2->cols; c++) {
           temp_m2->data[r][c] = mat2->data[r][c];
       }
   }
   // AB = C A = 4 * 3 B = 3 * 2 C = 4 * 2
-
-  for (int r = 0; r < result->rows; r++) {
-      for(int c = 0; c < result->cols; c++){
-          result[r][c] = 0;
-      }
+  #pragma omp parallel for
+  for (int r = 0; r < result->rows * result->cols; r++) {
+        result->data[r / result->cols][r % result->rows] = 0;
   }
 
-   #pragma omp parallel for
+  #pragma omp parallel for
   for (int r = 0; r < temp_m->rows; r++) {
-
       for(int i = 0; i < temp_m->cols; i++) {
-      for(int c = 0; c < temp_m2->cols; c++){
-            result->data[r][c] = 0;
+          for(int c = 0; c < temp_m2->cols; c++){
             result->data[r][c] = temp_m->data[r][i] * temp_m2->data[i][c] + result->data[r][c];
-
           }
       }
   }

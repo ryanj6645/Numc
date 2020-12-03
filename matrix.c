@@ -607,10 +607,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
                 // result->data[r][c] = mat1->data[r][i] * dst[c * mat2->rows + i] + result->data[r][c];
             }
-            // double p[4];
-            _mm256_storeu_pd(result->data[r] + c, result1);
+            double p[4];
+            _mm256_storeu_pd(p, result1);
 
-            // result->data[r][c] = p[0] + p[1] + p[2] + p[3];
+            result->data[r][c] = p[0] + p[1] + p[2] + p[3];
         }
         for (int c = mat2->cols/24 * 24; c < mat2->cols; c++) {
             for (int i = mat1->cols/24 * 24; i < mat1->cols; i++) {

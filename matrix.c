@@ -548,16 +548,19 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for (int c = 0; c < mat2->cols/4 * 4; c+=4) {
                 double *temp1 = mat1->data[r] + i;
                 double *temp2 = mat2->data[i] + c;
+                double *temp3 = result->data[r] + c;
                 __m256d m1rc1 = _mm256_loadu_pd(temp1);
                 __m256d m2rc1 = _mm256_loadu_pd(temp2);
+                __m256d resultData = _mm256_loadu_pd(temp3);
                 // result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
                 result1 = _mm256_fmadd_pd(m1rc1, m2rc1, result1);
-                _mm256_storeu_pd(result->data[r] + c, result1);
+                resultData = _mm256_add_pd(resultData, result1);
+                _mm256_storeu_pd(result->data[r] + c, resultData);
             }
 
         }
         for (int i = 0; i < mat1->cols; i++) {
-            for (int c = 0; c < mat2->cols; c++) {
+            for (int c = mat2->cols/4 * 4; c < mat2->cols; c++) {
                 result->data[r][c] = mat1->data[r][i] * mat2->data[i][c] + result->data[r][c];
             }
         }

@@ -516,9 +516,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     //#pragma omp parallel sections num_threads(2){
 
-    //#pragma omp parallel num_threads(4)
-    //{
-        #pragma omp for
+    #pragma omp parallel num_threads(4)
+    {
+        #pragma omp parallel for
         for (int r = 0; r < mat1->rows; r++) {
             for (int i = 0; i < mat1->cols; i++) {
                 for (int c = 0; c < mat2->cols; c++) {
@@ -526,7 +526,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 }
             }
         }
-    //}
+    }
 
     return 0;
 

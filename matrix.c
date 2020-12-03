@@ -531,34 +531,17 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         //     }
         // }
 
-    // double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
-    // int n = mat2->cols;
-    // int jump1 = 20;
-    // for(int r = 0; r < mat2->rows; r+= jump1) {
-    //     for(int c = 0; c < n; c+= jump1) {
-    //         for(int r2 = r; r2 < jump1 + r; r2++) {
-    //             for(int c2 = c; c2 < jump1 + c; c2++) {
-    //                 if (r2 >= mat2->rows || c2 >= n) {
-    //                     continue;
-    //                 } else {
-    //                     dst[c2 + r2 * mat2->rows] = mat2->data2[r2 + c2 * n];
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
     double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
     int n = mat2->cols;
-    int n2 = mat2->rows;
     int jump1 = 20;
-    for(int r = 0; r < n; r+= jump1) {
-        for(int c = 0; c < n2; c+= jump1) {
+    for(int r = 0; r < mat2->rows; r+= jump1) {
+        for(int c = 0; c < n; c+= jump1) {
             for(int r2 = r; r2 < jump1 + r; r2++) {
                 for(int c2 = c; c2 < jump1 + c; c2++) {
-                    if (r2 >= mat2->rows || c2 >= n2) {
+                    if (r2 >= mat2->rows || c2 >= n) {
                         continue;
                     } else {
-                        dst[c2 + r2 * n] = mat2->data2[r2 + c2 * n2];
+                        dst[r2 + c2 * mat2->rows] = mat2->data2[c2 + r2 * n];
                     }
                 }
             }

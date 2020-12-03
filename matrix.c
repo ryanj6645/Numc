@@ -541,7 +541,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // }
     // __m256d _mm256_fmadd_pd (__m256d a, __m256d b, __m256d c)
 
-    #pragma omp parallel for
+    // #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         for (int i = 0; i < mat1->cols; i++) {
             for (int c = 0; c < mat2->cols/4 * 4; c+=4) {

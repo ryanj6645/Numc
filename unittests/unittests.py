@@ -183,7 +183,6 @@ class TestNeg(TestCase):
         print_speedup(speed_up)
 
 
-class TestMul2(TestCase):
 
 
 class TestMul(TestCase):

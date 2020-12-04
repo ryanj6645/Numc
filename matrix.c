@@ -953,17 +953,6 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     // }
     // return 0;
 
-    double ** mat1t = (double **) malloc(mat->rows * sizeof(double *));
-    double * mat1data = (double *) malloc(mat->rows * mat->cols * sizeof(double));
-    for (int i = 0; i < mat->rows; i++) {
-       mat1t[i] = mat1data + i * mat->cols;
-    }
-    double ** mat2t = (double **) malloc(mat->rows * sizeof(double *));
-    double * mat2data = (double *) malloc(mat->rows * mat->cols * sizeof(double));
-    for (int i = 0; i < mat->rows; i++) {
-        mat2t[i] = mat2data + i * mat->cols;
-    }
-
 
 
 
@@ -972,6 +961,20 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     if (alloc_failed) {
         return -1;
     }
+    matrix *temp_1 = NULL;
+    alloc_failed = allocate_matrix(&temp_1, mat->rows, mat->cols);
+    if (alloc_failed) {
+        return -1;
+    }
+    matrix *temp_2 = NULL;
+    alloc_failed = allocate_matrix(&temp_2, mat->rows, mat->cols);
+    if (alloc_failed) {
+        return -1;
+    }
+
+
+
+
     #pragma omp parallel for
     for (int r = 0; r < mat->rows; r++) {
         for (int c = 0; c < mat->cols; c++) {
@@ -985,12 +988,27 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     }
     while(pow > 0){
       if (pow & 1) {
-          mul_matrix_pow(result, result, temp_m);
+          for(int r = 0; r < mat->rows; r++){
+              for(int c = 0; c < mat->cols; c++){
+                  temp_1->data[r][c] = result->data[r][c]
+              }
+          }
+          mul_matrix_pow(result, temp_1, temp_m);
           if(pow == 1){
               break;
           }
       }
       pow = pow >> 1;
+      for(int r = 0; r < mat->rows; r++){
+          for(int c = 0; c < mat->cols; c++){
+              temp_1->data[r][c] = result->data[r][c]
+          }
+      }
+      for(int r = 0; r < mat->rows; r++){
+          for(int c = 0; c < mat->cols; c++){
+              temp_1->data[r][c] = result->data[r][c]
+          }
+      }
       mul_matrix_pow(temp_m, temp_m, temp_m);
     }
     deallocate_matrix(temp_m);

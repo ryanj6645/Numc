@@ -598,6 +598,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     __m256d m1rc3 = _mm256_loadu_pd(temp1 + 8);
                     __m256d m1rc4 = _mm256_loadu_pd(temp1 + 12);
                     // __m256d m1rc5 = _mm256_loadu_pd(temp1 + 16);
+                    //reg
                     // __m256d m1rc6 = _mm256_loadu_pd(temp1 + 20);
                     // __m256d m1rc7 = _mm256_loadu_pd(temp1 + 24);
                     // __m256d m1rc8 = _mm256_loadu_pd(temp1 + 28);

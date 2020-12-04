@@ -953,15 +953,15 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     // }
     // return 0;
 
-    double ** mat1t = (double **) malloc(mat1->rows * sizeof(double *));
-    double * mat1data = (double *) malloc(mat1->rows * mat1->cols * sizeof(double));
-    for (int i = 0; i < mat1->rows; i++) {
-       mat1t[i] = mat1data + i * mat1->cols;
+    double ** mat1t = (double **) malloc(mat->rows * sizeof(double *));
+    double * mat1data = (double *) malloc(mat->rows * mat->cols * sizeof(double));
+    for (int i = 0; i < mat->rows; i++) {
+       mat1t[i] = mat1data + i * mat->cols;
     }
-    double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
-    double * mat2data = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
-    for (int i = 0; i < mat2->rows; i++) {
-        mat2t[i] = mat2data + i * mat2->cols;
+    double ** mat2t = (double **) malloc(mat->rows * sizeof(double *));
+    double * mat2data = (double *) malloc(mat->rows * mat->cols * sizeof(double));
+    for (int i = 0; i < mat->rows; i++) {
+        mat2t[i] = mat2data + i * mat->cols;
     }
 
 

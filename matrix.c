@@ -972,9 +972,6 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         return -1;
     }
 
-
-
-
     #pragma omp parallel for
     for (int r = 0; r < mat->rows; r++) {
         for (int c = 0; c < mat->cols; c++) {
@@ -990,7 +987,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
       if (pow & 1) {
           for(int r = 0; r < mat->rows; r++){
               for(int c = 0; c < mat->cols; c++){
-                  temp_1->data[r][c] = result->data[r][c]
+                  temp_1->data[r][c] = result->data[r][c];
               }
           }
           mul_matrix_pow(result, temp_1, temp_m);
@@ -1001,17 +998,19 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
       pow = pow >> 1;
       for(int r = 0; r < mat->rows; r++){
           for(int c = 0; c < mat->cols; c++){
-              temp_1->data[r][c] = result->data[r][c]
+              temp_1->data[r][c] = temp_m->data[r][c];
           }
       }
       for(int r = 0; r < mat->rows; r++){
           for(int c = 0; c < mat->cols; c++){
-              temp_1->data[r][c] = result->data[r][c]
+              temp_2->data[r][c] = temp_m->data[r][c];
           }
       }
-      mul_matrix_pow(temp_m, temp_m, temp_m);
+      mul_matrix_pow(temp_m, temp_1, temp_2);
     }
     deallocate_matrix(temp_m);
+    deallocate_matrix(temp_1);
+    deallocate_matrix(temp_2);
   }
     return 0;
 }

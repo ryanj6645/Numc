@@ -179,8 +179,10 @@ void deallocate_matrix(matrix *mat) {
         // }
         free(mat->data);
         free(mat->data2);
-    }
+    // flag the parent
+    
     free(mat);
+    // free the parent, then free the kid
 }
 
 /*

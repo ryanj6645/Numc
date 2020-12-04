@@ -841,7 +841,6 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     //         }
     //     }
     // }
-    int check = true;
     while(pow > 0){
       if (pow & 1) {
           mul_matrix_pow(result, result, temp_m);

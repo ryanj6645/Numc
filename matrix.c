@@ -687,18 +687,17 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
           mat1t[r][c] = mat1->data[r][c];
         }
     }
-    if (mat1->rows * mat1->cols < 10000) {
-        double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
-        double * mat2data = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
-        for (int i = 0; i < mat2->rows; i++) {
-            mat2t[i] = mat2data + i * mat2->cols;
-        }
+    
+    double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
+    double * mat2data = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
+    for (int i = 0; i < mat2->rows; i++) {
+        mat2t[i] = mat2data + i * mat2->cols;
+    }
 
-        #pragma omp parallel for
-        for (int r = 0; r < mat2->rows; r++) {
-            for(int c = 0; c < mat2->cols; c++){
-              mat2t[r][c] = mat2->data[r][c];
-            }
+    #pragma omp parallel for
+    for (int r = 0; r < mat2->rows; r++) {
+        for(int c = 0; c < mat2->cols; c++){
+          mat2t[r][c] = mat2->data[r][c];
         }
     }
 

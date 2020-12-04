@@ -150,7 +150,8 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
         return -1;
     }
     (*mat)->parent = from;
-    (*mat)->ref_cnt = from->ref_cnt + 1;
+    // (*mat)->ref_cnt = from->ref_cnt + 1;
+    (*mat)->ref_cnt = 1;
     from->ref_cnt = from->ref_cnt + 1;
     // CHANGED r <= ROWS to r < ROWS!!
     //ca
@@ -170,19 +171,58 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
  * See the spec for more information.
  */
 void deallocate_matrix(matrix *mat) {
+    // if (!mat) {
+    //     return;
+    // }
+    // if(mat->ref_cnt == 1){
+    //     // for (int r = 0; r < mat->rows; r++) {
+    //     //     free(mat->data[r]);
+    //     // }
+    //     free(mat->data);
+    //     free(mat->data2);
+    // // flag the parent
+    // }
+    // free(mat);
+    // // free the parent, then free the kid
     if (!mat) {
         return;
     }
-    if(mat->ref_cnt == 1){
-        // for (int r = 0; r < mat->rows; r++) {
-        //     free(mat->data[r]);
-        // }
-        free(mat->data);
-        free(mat->data2);
-    // flag the parent
+    if (mat->ref_cnt == 1 || mat->ref_cnt < 0) {
+        if (mat->parent) {
+            if (mat->parent->ref_cnt == -2) {
+                free(mat->parent->data);
+                free(mat->parent->data2);
+                free(mat->parent);
+                free(mat->data);
+                free(mat->data2);
+                free(mat);
+            } else if (mat->parent->ref_cnt < -2) {
+                mat->parent->ref_cnt += 1;
+                free(mat->data);
+                free(mat->data2);
+                free(mat);
+            } else {
+                mat->parent->ref_cnt -= 1;
+                free(mat->data);
+                free(mat->data2);
+                free(mat);
+            }
+        } else if (mat->ref_cnt < -1) {
+            return;
+        } else if (mat->ref_cnt == -1) {
+            free(mat->data);
+            free(mat->data2);
+            free(mat);
+        } else if (mat->ref_cnt == 1) {
+            free(mat->data);
+            free(mat->data2);
+            free(mat);
+        }
+    } else if (mat->ref_cnt != 1) {
+        if (mat->ref_cnt > 0) {
+            mat->ref_cnt = mat->ref_cnt * -1;
+        }
     }
-    free(mat);
-    // free the parent, then free the kid
 }
 
 /*
@@ -905,42 +945,57 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         }
     } else if(pow >= 2){
         //RECURSIVE
-        pow_matrix(result, mat, pow>>1);
-        mul_matrix_pow(result, result, result);
-        if(pow & 1){
-            mul_matrix_pow(result, result, mat);
-        }
-    }
-    return 0;
-
-    // matrix *temp_m = NULL;
-    // int alloc_failed = allocate_matrix(&temp_m, mat->rows, mat->cols);
-    // if (alloc_failed) {
-    //     return -1;
-    // }
-    // #pragma omp parallel for
-    // for (int r = 0; r < mat->rows; r++) {
-    //     for (int c = 0; c < mat->cols; c++) {
-    //         temp_m->data[r][c] = mat->data[r][c];
-    //         if(c == r){
-    //             result->data[r][c] = 1;
-    //         }else{
-    //             result->data[r][c] = 0;
-    //         }
+    //     pow_matrix(result, mat, pow>>1);
+    //     mul_matrix_pow(result, result, result);
+    //     if(pow & 1){
+    //         mul_matrix_pow(result, result, mat);
     //     }
     // }
-    // while(pow > 0){
-    //   if (pow & 1) {
-    //       mul_matrix_pow(result, result, temp_m);
-    //       if(pow == 1){
-    //           break;
-    //       }
-    //   }
-    //   pow = pow >> 1;
-    //   mul_matrix_pow(temp_m, temp_m, temp_m);
-    // }
-    // deallocate_matrix(temp_m);
     // return 0;
+
+    double ** mat1t = (double **) malloc(mat1->rows * sizeof(double *));
+    double * mat1data = (double *) malloc(mat1->rows * mat1->cols * sizeof(double));
+    for (int i = 0; i < mat1->rows; i++) {
+       mat1t[i] = mat1data + i * mat1->cols;
+    }
+    double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
+    double * mat2data = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
+    for (int i = 0; i < mat2->rows; i++) {
+        mat2t[i] = mat2data + i * mat2->cols;
+    }
+
+
+
+
+    matrix *temp_m = NULL;
+    int alloc_failed = allocate_matrix(&temp_m, mat->rows, mat->cols);
+    if (alloc_failed) {
+        return -1;
+    }
+    #pragma omp parallel for
+    for (int r = 0; r < mat->rows; r++) {
+        for (int c = 0; c < mat->cols; c++) {
+            temp_m->data[r][c] = mat->data[r][c];
+            if(c == r){
+                result->data[r][c] = 1;
+            }else{
+                result->data[r][c] = 0;
+            }
+        }
+    }
+    while(pow > 0){
+      if (pow & 1) {
+          mul_matrix_pow(result, result, temp_m);
+          if(pow == 1){
+              break;
+          }
+      }
+      pow = pow >> 1;
+      mul_matrix_pow(temp_m, temp_m, temp_m);
+    }
+    deallocate_matrix(temp_m);
+  }
+    return 0;
 }
 
 /*

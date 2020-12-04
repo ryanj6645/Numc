@@ -842,6 +842,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
       pow = pow >> 1;
       mul_matrix_pow(temp_m, temp_m, temp_m);
     }
+    deallocate_matrix(temp_m);
     return 0;
 }
 

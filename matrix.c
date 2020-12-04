@@ -561,7 +561,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
 
-    if (mat1->cols * mat1->rows > 1000) {
+    if (mat1->cols * mat1->rows > 10000) {
         double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
         int n = mat2->cols;
         int jump1 = 20;

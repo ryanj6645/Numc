@@ -832,15 +832,6 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             }
         }
     }
-    // for (int r = 0; r < mat->rows; r++) {
-    //     for (int c = 0; c < mat->cols; c++) {
-    //         if(c == r){
-    //             result->data[r][c] = 1;
-    //         }else{
-    //             result->data[r][c] = 0;
-    //         }
-    //     }
-    // }
     while(pow > 0){
       if (pow & 1) {
           mul_matrix_pow(result, result, temp_m);
@@ -850,15 +841,8 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
       }
       pow = pow >> 1;
       mul_matrix_pow(temp_m, temp_m, temp_m);
-
-
     }
-
-
     return 0;
-
-
-
 }
 
 /*

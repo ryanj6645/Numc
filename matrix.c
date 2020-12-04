@@ -648,6 +648,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 }
             }
         }
+        free(dst);
     }
     else {
         for (int r = 0; r < mat1->rows; r++) {
@@ -669,7 +670,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     }
     // }
     // __m256d _mm256_fmadd_pd (__m256d a, __m256d b, __m256d c)
-    free(dst);
+
     return 0;
 }
 
@@ -788,6 +789,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
                 }
             }
         }
+        free(dst);
     }
     else {
     //     #pragma omp parallel for
@@ -802,7 +804,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
 
     free(mat1data);
     free(mat1t);
-    free(dst);
+
     //free(mat2data);
     //free(mat2t);
     return 0;

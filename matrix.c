@@ -681,23 +681,23 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
     for (int i = 0; i < mat1->rows; i++) {
        mat1t[i] = mat1data + i * mat1->cols;
     }
-    double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
-    double * mat2data = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
-    for (int i = 0; i < mat2->rows; i++) {
-        mat2t[i] = mat2data + i * mat2->cols;
-    }
+    // double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
+    // double * mat2data = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
+    // for (int i = 0; i < mat2->rows; i++) {
+    //     mat2t[i] = mat2data + i * mat2->cols;
+    // }
     #pragma omp parallel for
     for (int r = 0; r < mat1->rows; r++) {
         for(int c = 0; c < mat1->cols; c++){
           mat1t[r][c] = mat1->data[r][c];
         }
     }
-    #pragma omp parallel for
-    for (int r = 0; r < mat2->rows; r++) {
-        for(int c = 0; c < mat2->cols; c++){
-          mat2t[r][c] = mat2->data[r][c];
-        }
-    }
+    // #pragma omp parallel for
+    // for (int r = 0; r < mat2->rows; r++) {
+    //     for(int c = 0; c < mat2->cols; c++){
+    //       mat2t[r][c] = mat2->data[r][c];
+    //     }
+    // }
     #pragma omp parallel for
     for (int r = 0; r < result->rows; r++) {
         for (int c = 0; c < result->cols; c++) {
@@ -792,7 +792,19 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         free(dst);
     }
     else {
-    //     #pragma omp parallel for
+        double ** mat2t = (double **) malloc(mat2->rows * sizeof(double *));
+        double * mat2data = (double *) malloc(mat2->rows * mat2->cols * sizeof(double));
+        for (int i = 0; i < mat2->rows; i++) {
+            mat2t[i] = mat2data + i * mat2->cols;
+        }
+        #pragma omp parallel for
+        for (int r = 0; r < mat2->rows; r++) {
+            for(int c = 0; c < mat2->cols; c++){
+              mat2t[r][c] = mat2->data[r][c];
+            }
+        }
+        
+
         for (int r = 0; r < mat1->rows; r++) {
             for (int i = 0; i < mat1->cols; i++) {
                 for (int c = 0; c < mat2->cols; c++) {
@@ -800,13 +812,14 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
                 }
             }
         }
+        free(mat2data);
+        free(mat2t);
     }
 
     free(mat1data);
     free(mat1t);
 
-    //free(mat2data);
-    //free(mat2t);
+
     return 0;
 
 

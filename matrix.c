@@ -588,7 +588,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         for (int r = 0; r < mat1->rows; r++) {
             for (int c = 0; c < mat2->cols; c++) {
                 double *temp3 = result->data[r] + c;
-                __m256d result1 = _mm256_loadu_pd(temp3);
+                __m256d result1 = _mm256_setzero_pd(temp3);
                 int flag = 0;
                 for (int i = 0; i < mat1->cols/24 * 24; i+=24) {
                     flag = 1;

@@ -816,6 +816,20 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     // }
     // return 0;
 
+    matrix *temp_m = NULL;
+    int alloc_failed = allocate_matrix(&temp_m, mat->rows, mat->cols);
+    if (alloc_failed) {
+        return -1;
+    }
+    #pragma omp parallel for
+    for (int r = 0; r < mat->rows; r++) {
+        for (int c = 0; c < mat->cols; c++) {
+            temp_m->data[r][c] = mat->data[r][c];
+        }
+    }
+
+
+
     for (int r = 0; r < mat->rows; r++) {
         for (int c = 0; c < mat->cols; c++) {
             if(c == r){
@@ -828,13 +842,14 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
     while(pow > 0){
       if (pow & 1) {
-          mul_matrix_pow(result, result, mat);
+          mul_matrix_pow(result, result, temp_m);
           if(pow == 1){
+
               break;
           }
       }
       pow = pow >> 1;
-      mul_matrix_pow(mat, mat, mat);
+      mul_matrix_pow(temp_m, temp_m, temp_m);
 
 
     }

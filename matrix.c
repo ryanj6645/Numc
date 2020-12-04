@@ -827,7 +827,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     }
 
     while(pow > 0){
-      if (y & 1) {
+      if (pow & 1) {
           mul_matrix_pow(result, result, mat);
           if(y == 1){
               break;

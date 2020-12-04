@@ -788,8 +788,7 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     if(pow <0){
         return -1;
-    }
-    if (pow == 0) {
+    }else if (pow == 0) {
         for (int r = 0; r < mat->rows; r++) {
             for (int c = 0; c < mat->cols; c++) {
                 if(c == r){
@@ -800,31 +799,48 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             }
         }
         return 0;
-    } else if(pow == 1) {
-        for (int r = 0; r < mat->rows; r++) {
-            for (int c = 0; c < mat->cols; c++) {
-                result->data[r][c] = mat->data[r][c];
+    }
+    // else if(pow == 1) {
+    //     for (int r = 0; r < mat->rows; r++) {
+    //         for (int c = 0; c < mat->cols; c++) {
+    //             result->data[r][c] = mat->data[r][c];
+    //         }
+    //     }
+    // } else if(pow >= 2){
+    //     //RECURSIVE
+    //     pow_matrix(result, mat, pow>>1);
+    //     mul_matrix_pow(result, result, result);
+    //     if(pow & 1){
+    //         mul_matrix_pow(result, result, mat);
+    //     }
+    // }
+    // return 0;
+
+    for (int r = 0; r < mat->rows; r++) {
+        for (int c = 0; c < mat->cols; c++) {
+            if(c == r){
+                result->data[r][c] = 1;
+            }else{
+                result->data[r][c] = 0;
             }
         }
-    } else if(pow >= 2){
-        //RECURSIVE
-        pow_matrix(result, mat, pow>>1);
-        mul_matrix_pow(result, result, result);
-        if(pow & 1){
-            mul_matrix_pow(result, result, mat);
-        }
     }
+
+    while(pow > 0){
+      if (y & 1) {
+          mul_matrix_pow(result, result, mat);
+          if(y == 1){
+              break;
+          }
+      }
+      pow = pow >> 1;
+      mul_matrix_pow(mat, mat, mat);
+
+
+    }
+
+
     return 0;
-
-
-    while(pow > ){
-
-
-
-    }
-
-
-
 
 
 

@@ -159,8 +159,8 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
     // if rows = 1 or cols = 1, then is_1d is 1, o.w. 0.
     (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
     (*mat)->data = (double **) malloc(rows * sizeof(double *));
-    if (!(*mat)->data || !(*mat)->data2) {
-        // free(mat);
+    if (!(*mat)->data) {
+        free(mat);
         return -1;
     }
     //#pragma omp parallel for

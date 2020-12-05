@@ -215,17 +215,17 @@ void deallocate_matrix(matrix *mat) {
                 free(mat->parent->data2);
                 free(mat->parent);
                 free(mat->data);
-                free(mat->data2);
+                // free(mat->data2);
                 free(mat);
             } else if (mat->parent->ref_cnt < -2) {
                 mat->parent->ref_cnt += 1;
                 free(mat->data);
-                free(mat->data2);
+                // free(mat->data2);
                 free(mat);
             } else {
                 mat->parent->ref_cnt -= 1;
                 free(mat->data);
-                free(mat->data2);
+                // free(mat->data2);
                 free(mat);
             }
         } else if (mat->ref_cnt < -1) {

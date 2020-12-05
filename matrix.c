@@ -762,12 +762,12 @@ int mul_matrix_pow(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
 
-    #pragma omp parallel for
-    for (int r = 0; r < result->rows; r++) {
-        for (int c = 0; c < result->cols; c++) {
-            result->data[r][c] = 0;
-        }
-    }
+    // #pragma omp parallel for
+    // for (int r = 0; r < result->rows; r++) {
+    //     for (int c = 0; c < result->cols; c++) {
+    //         result->data[r][c] = 0;
+    //     }
+    // }
 
 
     #pragma omp parallel for
@@ -1010,6 +1010,12 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
           for(int r = 0; r < mat->rows; r++){
               for(int c = 0; c < mat->cols; c++){
                   temp_1->data[r][c] = result->data[r][c];
+              }
+          }
+          #pragma omp parallel for
+          for (int r = 0; r < result->rows; r++) {
+              for (int c = 0; c < result->cols; c++) {
+                  result->data[r][c] = 0;
               }
           }
           mul_matrix_pow(result, temp_1, temp_m);

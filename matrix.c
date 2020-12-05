@@ -145,32 +145,28 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
                         int rows, int cols) {
     /* TODO: YOUR CODE HERE */
     // COPY ALLOCATE HERE
-    int alloc_failed = allocate_matrix(mat, rows, cols);
-    if (alloc_failed) {
+    // int alloc_failed = allocate_matrix(mat, rows, cols);
+    // if (alloc_failed) {
+    //     return -1;
+    // }
+
+    *mat = malloc(sizeof(matrix));
+    if (!*mat) {
         return -1;
     }
-
-    // *mat = malloc(sizeof(matrix));
-    // if (!*mat) {
-    //     return -1;
-    // }
-    // (*mat)->rows = rows;
-    // (*mat)->cols = cols;
-    // (*mat)->ref_cnt = 1;
-    // (*mat)->parent = NULL;
-    // // if rows = 1 or cols = 1, then is_1d is 1, o.w. 0.
-    // (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
-    // (*mat)->data = (double **) malloc(rows * sizeof(double *));
-    // (*mat)->data2 = (double *) calloc(rows * cols, sizeof(double));
-    // if (!(*mat)->data || !(*mat)->data2) {
-    //     free(mat);
-    //     return -1;
-    // }
-    // //#pragma omp parallel for
+    (*mat)->rows = rows;
+    (*mat)->cols = cols;
+    // if rows = 1 or cols = 1, then is_1d is 1, o.w. 0.
+    (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
+    (*mat)->data = (double **) malloc(rows * sizeof(double *));
+    if (!(*mat)->data || !(*mat)->data2) {
+        free(mat);
+        return -1;
+    }
+    //#pragma omp parallel for
     // for (int i = 0; i < (*mat)->rows; i++) {
     //     (*mat)->data[i] = (*mat)->data2 + i * cols;
     // }
-
 
 
 

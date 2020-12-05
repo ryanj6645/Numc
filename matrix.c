@@ -1018,7 +1018,6 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
                   temp_1->data[r][c] = result->data[r][c];
               }
           }
-          #pragma omp parallel for
           mul_matrix(result, temp_1, temp_m);
           if(pow == 1){
               break;

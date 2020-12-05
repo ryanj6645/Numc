@@ -160,7 +160,7 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
     (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
     (*mat)->data = (double **) malloc(rows * sizeof(double *));
     if (!(*mat)->data || !(*mat)->data2) {
-        free(mat);
+        // free(mat);
         return -1;
     }
     //#pragma omp parallel for

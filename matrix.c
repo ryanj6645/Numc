@@ -621,6 +621,12 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //         }
     //     }
     // }
+    #pragma omp parallel for
+    for (int r = 0; r < result->rows; r++) {
+        for (int c = 0; c < result->cols; c++) {
+            result->data[r][c] = 0;
+        }
+    }
 
     if (mat1->cols * mat1->rows > 10000) {
         double* dst = (double*) malloc(mat2->rows * mat2->cols * sizeof(double));
@@ -1013,12 +1019,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
               }
           }
           #pragma omp parallel for
-          for (int r = 0; r < result->rows; r++) {
-              for (int c = 0; c < result->cols; c++) {
-                  result->data[r][c] = 0;
-              }
-          }
-          mul_matrix_pow(result, temp_1, temp_m);
+          mul_matrix(result, temp_1, temp_m);
           if(pow == 1){
               break;
           }
@@ -1030,7 +1031,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
               temp_2->data[r][c] = temp_m->data[r][c];
           }
       }
-      mul_matrix_pow(temp_m, temp_1, temp_2);
+      mul_matrix(temp_m, temp_1, temp_2);
     }
     deallocate_matrix(temp_m);
     deallocate_matrix(temp_1);

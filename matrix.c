@@ -149,6 +149,31 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
     if (alloc_failed) {
         return -1;
     }
+
+    // *mat = malloc(sizeof(matrix));
+    // if (!*mat) {
+    //     return -1;
+    // }
+    // (*mat)->rows = rows;
+    // (*mat)->cols = cols;
+    // (*mat)->ref_cnt = 1;
+    // (*mat)->parent = NULL;
+    // // if rows = 1 or cols = 1, then is_1d is 1, o.w. 0.
+    // (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
+    // (*mat)->data = (double **) malloc(rows * sizeof(double *));
+    // (*mat)->data2 = (double *) calloc(rows * cols, sizeof(double));
+    // if (!(*mat)->data || !(*mat)->data2) {
+    //     free(mat);
+    //     return -1;
+    // }
+    // //#pragma omp parallel for
+    // for (int i = 0; i < (*mat)->rows; i++) {
+    //     (*mat)->data[i] = (*mat)->data2 + i * cols;
+    // }
+
+
+
+
     (*mat)->parent = from;
     // (*mat)->ref_cnt = from->ref_cnt + 1;
     (*mat)->ref_cnt = 1;
@@ -990,7 +1015,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
                   temp_1->data[r][c] = result->data[r][c];
               }
           }
-          mul_matrix_pow(result, temp_1, temp_m);
+          mul_matrix(result, temp_1, temp_m);
           if(pow == 1){
               break;
           }
@@ -1006,7 +1031,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
               temp_2->data[r][c] = temp_m->data[r][c];
           }
       }
-      mul_matrix_pow(temp_m, temp_1, temp_2);
+      mul_matrix(temp_m, temp_1, temp_2);
     }
     deallocate_matrix(temp_m);
     deallocate_matrix(temp_1);
